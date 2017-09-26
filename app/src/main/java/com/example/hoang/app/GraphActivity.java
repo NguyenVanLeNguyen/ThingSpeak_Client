@@ -29,7 +29,7 @@ public class GraphActivity extends AppCompatActivity {
        Bundle intent = getIntent().getExtras();
         devi = (Device) intent.getParcelable(MainActivity.DEVICE);
 
-
+        setData();
         Legend l = mChart.getLegend();
         l.setForm(Legend.LegendForm.LINE);
 
@@ -58,14 +58,15 @@ public class GraphActivity extends AppCompatActivity {
 
     private ArrayList<Entry> setYAxisValues(){
         ArrayList<Entry> yVals = new ArrayList<Entry>();
-        yVals.add(new Entry(60, 0));
-        yVals.add(new Entry(48, 1));
-        yVals.add(new Entry(70.5f, 2));
-        yVals.add(new Entry(100, 3));
-        yVals.add(new Entry(180.9f, 4));
+        yVals.add(new Entry(0, 60));
+        yVals.add(new Entry(1, 48));
+        yVals.add(new Entry(2,70.5f ));
+        yVals.add(new Entry(3, 100));
+        yVals.add(new Entry(4, 180.9f));
 
         return yVals;
     }
+
     private void setData() {
         ArrayList<String> xVals = setXAxisValues();
 

@@ -38,7 +38,7 @@ public class ProcessingTime {
     {
         int result = 0 ;
         long distance;
-        
+
         distance = time1.getTimeInMillis() - time2.getTimeInMillis();
         result = (int) (distance/3600000);
         return  result;

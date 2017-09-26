@@ -3,21 +3,66 @@
 
     <item
         is-multidex="true"
-        jar="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="26.0.1"
-        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
-        <dex dex="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_cd12129a72ac29ded26e7b7525d333d7105461a1/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
         revision="26.0.1"
         sha1="bf637198e7a5dc18aafd6f251fa673bef8a5372e">
         <dex dex="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_da0f883afbb7645f95cff733a1670c21cc4ecfeb/classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/hoang/.android/build-cache/7700db5f4d5fea86017b6dc9036c5c389cb8d342/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="6a022bf00ccd0948a8180c505e8e458bbddd43a6">
+        <dex dex="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/pre-dexed/debug/classes_99e6dbbfdf47070efa54925527f741ed3c91a196.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/hoang/.android/build-cache/f6873ce3f589ca5821f6e204026678b8719d3628/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="cddcd0fb93bc70e27325f2f715b2710332004ebb">
+        <dex dex="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/pre-dexed/debug/classes_1a02875b32ccec43285104edf5347677cdf7b606.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/hoang/.android/build-cache/4c74b556a06d5a44194b7895386eb5ffbc96d495/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="c4f45092eee6cdf1a5dbd597b2b6819be652ce2e">
+        <dex dex="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/pre-dexed/debug/classes_28e49868295de281343783e31965b038d484fb68.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/hoang/.gradle/caches/modules-2/files-2.1/com.github.PhilJay/MPAndroidChart/v3.0.2/5d4eb08a326bdbd7fbbddc769666898c9936b282/MPAndroidChart-v3.0.2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="5d4eb08a326bdbd7fbbddc769666898c9936b282">
+        <dex dex="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/pre-dexed/debug/MPAndroidChart-v3.0.2_69f169a59d155f7fe71a755adc44beea8781302f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/hoang/.android/build-cache/c3ea85305746d449ed9d62ac5a16a0512c66ca73/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="f200454bd6851899efe021d2a4673959986edaed">
+        <dex dex="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/pre-dexed/debug/classes_d32fcf47e7781a631fbeed668100a60be0a0fee7.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_cd12129a72ac29ded26e7b7525d333d7105461a1/classes.dex" />
     </item>
 
 </items>
