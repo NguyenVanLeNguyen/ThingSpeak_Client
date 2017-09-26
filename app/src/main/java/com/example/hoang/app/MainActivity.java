@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Pair;
 import android.view.View;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     ListView lvDevice ;
     private ArrayList<Device> listDevice;
     private Toolbar toolbar;
+    SearchView searchview ;
     Calendar c = Calendar.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //searchview = (SearchView) findViewById(R.id.action_search);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
@@ -47,10 +50,10 @@ public class MainActivity extends AppCompatActivity {
         GregorianCalendar time4 = new GregorianCalendar(2017,2,2,4,30,30);
         GregorianCalendar time5 = new GregorianCalendar(2017,2,2,5,30,30);
         GregorianCalendar time6 = new GregorianCalendar(2017,2,2,6,30,30);
-        GregorianCalendar time7 = new GregorianCalendar(2017,2,2,7,30,30);
-        GregorianCalendar time8 = new GregorianCalendar(2017,2,2,8,30,30);
-        GregorianCalendar time9 = new GregorianCalendar(2017,2,2,9,30,30);
-        GregorianCalendar time10 = new GregorianCalendar(2017,2,2,10,30,30);
+        GregorianCalendar time7 = new GregorianCalendar(2017,2,3,0,30,30);
+        GregorianCalendar time8 = new GregorianCalendar(2017,2,3,2,30,30);
+        GregorianCalendar time9 = new GregorianCalendar(2017,2,3,4,30,30);
+        GregorianCalendar time10 = new GregorianCalendar(2017,2,3,5,30,30);
 
         Pair<GregorianCalendar,Integer> va_1 = Pair.create(time1,40);
         Pair<GregorianCalendar,Integer> va_2 = Pair.create(time2,80);
@@ -110,6 +113,29 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+
+        final ArrayList<Device> finalListDevice1 = listDevice;
+
+        /*searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                ArrayList<Device> newlist = new ArrayList<Device>();
+                for(Device de : finalListDevice1){
+                    if(newText.contains(de.getAPIkey()));
+                    newlist.add(de);
+
+                }
+                CustomAdapter custem2 = new CustomAdapter(MainActivity.this, item, newlist);
+                lvDevice.setAdapter(custem2);
+
+                return false;
+            }
+        });*/
     }
 
 
@@ -123,18 +149,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item_) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        int id = item_.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
+            searchview = (SearchView) findViewById(R.id.action_search);
+            searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    ArrayList<Device> newlist = new ArrayList<Device>();
+                    for(Device de : listDevice){
+                        if(de.getAPIkey().contains(newText));
+                        newlist.add(de);
+                    }
+                    CustomAdapter custem2 = new CustomAdapter(MainActivity.this, item, newlist);
+                    lvDevice.setAdapter(custem2);
+                    lvDevice.invalidateViews();
+                    return false;
+                }
+            });
             return true;
         }
 
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item_);
     }
 
     public void provideGraph(Device devi){

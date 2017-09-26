@@ -5,9 +5,14 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Pair;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -19,25 +24,50 @@ import java.util.GregorianCalendar;
 public class GraphActivity extends AppCompatActivity {
 
     private LineChart mChart;
-    Device devi;
+    private Spinner spinner;
+    private Device devi;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
         mChart = (LineChart) findViewById(R.id.lch_level);
+        spinner = (Spinner) findViewById(R.id.sp_mode);
 
-       Bundle intent = getIntent().getExtras();
+        //Get the Data What MainActivity sent
+        Bundle intent = getIntent().getExtras();
         devi = (Device) intent.getParcelable(MainActivity.DEVICE);
+
+        //Processing Spiner
+        ArrayList<String> Modes = new ArrayList<String>();
+        Modes.add("To Day");
+        Modes.add("This Week");
+        ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item,Modes);
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         setData();
         Legend l = mChart.getLegend();
         l.setForm(Legend.LegendForm.LINE);
+        mChart.setTouchEnabled(true);
+
+        XAxis xa = mChart.getXAxis();
+        xa.setAxisMaximum(24f);
 
     }
 
-    public void draw(Device devi){
 
-    }
     public ArrayList<Entry> alterTime(ArrayList<Pair<GregorianCalendar,Integer>> list){
         ArrayList<Entry> yVals = new ArrayList<Entry>();
         int SizeofData = list.size();
@@ -56,13 +86,35 @@ public class GraphActivity extends AppCompatActivity {
         return xVals;
     }
 
-    private ArrayList<Entry> setYAxisValues(){
+    private ArrayList<Entry> setYAxisValues_ToDay(){
         ArrayList<Entry> yVals = new ArrayList<Entry>();
+
+        /*int numOfEntry = devi.getData().size() - 1;
+
+        for(int i =  numOfEntry;i >= 0 ; i--  ){
+
+        }*/
         yVals.add(new Entry(0, 60));
         yVals.add(new Entry(1, 48));
         yVals.add(new Entry(2,70.5f ));
         yVals.add(new Entry(3, 100));
-        yVals.add(new Entry(4, 180.9f));
+        yVals.add(new Entry(4, 80.9f));
+
+        return yVals;
+    }
+
+    private ArrayList<Entry> setYAxisValues_ThisWeek(){
+        ArrayList<Entry> yVals = new ArrayList<Entry>();
+        /*int numOfEntry = devi.getData().size() - 1;
+
+        for(int i =  numOfEntry;i >= 0 ; i--  ){
+
+        }*/
+        yVals.add(new Entry(0, 60));
+        yVals.add(new Entry(1, 48));
+        yVals.add(new Entry(2,70.5f ));
+        yVals.add(new Entry(3, 100));
+        yVals.add(new Entry(4, 80.9f));
 
         return yVals;
     }
@@ -70,7 +122,7 @@ public class GraphActivity extends AppCompatActivity {
     private void setData() {
         ArrayList<String> xVals = setXAxisValues();
 
-        ArrayList<Entry> yVals = setYAxisValues();
+        ArrayList<Entry> yVals = setYAxisValues_ToDay();
 
         LineDataSet set1;
 

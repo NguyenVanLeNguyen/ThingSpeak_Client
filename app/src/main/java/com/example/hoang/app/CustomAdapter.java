@@ -65,14 +65,14 @@ public class CustomAdapter extends ArrayAdapter<com.example.hoang.app.Device> {
         }
         else if(level >= 20 && level < 60) {
             //viewholder.lilao.setBackgroundColor(this.getContext().getResources().getColor(R.color.medidum));
-            viewholder.circle.setFinishedColor(this.getContext().getResources().getColor(R.color.medidum));
+            viewholder.circle.setFinishedColor(this.getContext().getResources().getColor(R.color.Medidum));
         }
         else{
 
             //viewholder.lilao.setBackgroundColor(this.getContext().getResources().getColor(R.color.safe));
-            viewholder.circle.setFinishedColor(this.getContext().getResources().getColor(R.color.safe));
+            viewholder.circle.setFinishedColor(this.getContext().getResources().getColor(R.color.Safe));
         }
-
+        viewholder.lilao.setBackgroundColor(this.getContext().getResources().getColor(R.color.BackgroundItem));
 
         return convertView;
     }

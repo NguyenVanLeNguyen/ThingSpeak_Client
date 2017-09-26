@@ -1,7 +1,9 @@
 package com.example.hoang.app;
 
+
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -34,13 +36,16 @@ public class ProcessingTime {
         return time;
     }
 
-    public int DistanceBetweenTwoTime(GregorianCalendar time1,GregorianCalendar time2)
+    public int DistanceBetweenTwoTime(GregorianCalendar time1,GregorianCalendar time2,Long timeUnit)
     {
         int result = 0 ;
         long distance;
-
-        distance = time1.getTimeInMillis() - time2.getTimeInMillis();
-        result = (int) (distance/3600000);
+        GregorianCalendar cTime = new GregorianCalendar();
+        cTime.setTime(time2.getTime());
+        cTime.set(Calendar.MINUTE,time1.get(Calendar.MINUTE));
+        cTime.set(Calendar.SECOND,time1.get(Calendar.SECOND));
+        distance = time1.getTimeInMillis() - cTime.getTimeInMillis();
+        result = (int) (distance/timeUnit);
         return  result;
     }
 }

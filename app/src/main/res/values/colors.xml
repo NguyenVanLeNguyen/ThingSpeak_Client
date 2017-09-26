@@ -7,6 +7,7 @@
     <color name="navigationBarColor">#000000</color>
     <color name="colorAccent">#FF80AB</color>
     <color name="Dangerous">#EF5350</color>
-    <color name="safe">#1DE9B6</color>
-    <color name="medidum">#FFB74D</color>
+    <color name="Safe">#1DE9B6</color>
+    <color name="Medidum">#FFB74D</color>
+    <color name="BackgroundItem">#FCE4EC</color>
 </resources>

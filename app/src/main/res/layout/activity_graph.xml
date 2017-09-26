@@ -8,8 +8,10 @@
     tools:context="com.example.hoang.app.GraphActivity"
     android:orientation="vertical">
 
-    <TextView
+    <Spinner
+        android:id="@+id/sp_mode"
         android:layout_width="match_parent"
+        android:layout_marginLeft="200dp"
         android:layout_height="wrap_content" />
 
     <com.github.mikephil.charting.charts.LineChart
