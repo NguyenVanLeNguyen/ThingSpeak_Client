@@ -21,12 +21,12 @@
     </item>
     <item
         is-multidex="true"
-        jar="/home/nguyenhoang/AndroidStudioProjects/App/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jar="/home/nguyenhoang/AndroidStudioProjects/ThingSpeak_Client/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
         revision="26.0.1"
-        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
-        <dex dex="/home/nguyenhoang/AndroidStudioProjects/App/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_3e7dc6fd651d4781992505f8407d79621f61ec25/classes.dex" />
+        sha1="66420f4246e877eeb335ad421d43bd5287337721">
+        <dex dex="/home/nguyenhoang/AndroidStudioProjects/ThingSpeak_Client/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_61810eed95a6fd22f10178db86cf1900ae9007b2/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -36,6 +36,24 @@
         revision="26.0.1"
         sha1="fffe957122a33a561b9fef8bea3688afae5248a5">
         <dex dex="/home/nguyenhoang/AndroidStudioProjects/App/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_4af4cf011766d86bdd22af280ae194cd75be911e/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/nguyenhoang/AndroidStudioProjects/ThingSpeak_Client/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="/home/nguyenhoang/AndroidStudioProjects/ThingSpeak_Client/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_c62ba560642e0998dc7d40ab526b009d94ec45cb/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/nguyenhoang/AndroidStudioProjects/App/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="/home/nguyenhoang/AndroidStudioProjects/App/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_3e7dc6fd651d4781992505f8407d79621f61ec25/classes.dex" />
     </item>
 
 </items>

@@ -1,18 +1,22 @@
 package com.example.hoang.app;
 
 import android.content.Intent;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Pair;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,9 +28,10 @@ public class MainActivity extends AppCompatActivity {
     public static final String DEVICE = "DeviceSelect";
     ListView lvDevice ;
     private ArrayList<Device> listDevice;
+    private ArrayList<Device> CopyList;
     private Toolbar toolbar;
     SearchView searchview ;
-    Calendar c = Calendar.getInstance();
+    CustomAdapter custem;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         lvDevice = (ListView) findViewById(R.id.liv1);
-        ArrayList<Device> listDevice = new ArrayList<>();
         listDevice = new ArrayList<Device>();
 
         GregorianCalendar time1 = new GregorianCalendar(2017,2,2,1,30,30);
@@ -100,7 +104,10 @@ public class MainActivity extends AppCompatActivity {
         listDevice.add(de_2);
         listDevice.add(de_3);
 
-        CustomAdapter custem = new CustomAdapter(this, item,listDevice);
+        CopyList = new ArrayList<Device>();
+        CopyList.addAll(listDevice);
+
+        custem = new CustomAdapter(this, item,listDevice);
         lvDevice.setAdapter(custem);
 
         final ArrayList<Device> finalListDevice = listDevice;
@@ -116,26 +123,6 @@ public class MainActivity extends AppCompatActivity {
 
         final ArrayList<Device> finalListDevice1 = listDevice;
 
-        /*searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                ArrayList<Device> newlist = new ArrayList<Device>();
-                for(Device de : finalListDevice1){
-                    if(newText.contains(de.getAPIkey()));
-                    newlist.add(de);
-
-                }
-                CustomAdapter custem2 = new CustomAdapter(MainActivity.this, item, newlist);
-                lvDevice.setAdapter(custem2);
-
-                return false;
-            }
-        });*/
     }
 
 
@@ -144,8 +131,53 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_tolbar, menu);
-        return true;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_tolbar, menu);
+        MenuItem searchViewItem = menu.findItem(R.id.action_search);
+        SearchView searchview = (SearchView) searchViewItem.getActionView();
+        searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                listDevice.clear();
+                if(query.length() == 0) {
+                    listDevice.addAll(CopyList);
+                }
+                else
+                {
+                    for(Device de : CopyList)
+                    {
+                        if(de.getAPIkey().contains(query))
+                        {
+                            listDevice.add(de);
+                        }
+                    }
+                }
+                custem.notifyDataSetChanged();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                listDevice.clear();
+                if(newText.length() == 0) {
+                    listDevice.addAll(CopyList);
+                }
+                else
+                {
+                    for(Device de : CopyList)
+                    {
+                        if(de.getAPIkey().contains(newText))
+                        {
+                            listDevice.add(de);
+                        }
+                    }
+                }
+                custem.notifyDataSetChanged();
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -157,31 +189,12 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
-            searchview = (SearchView) findViewById(R.id.action_search);
-            searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    return false;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    ArrayList<Device> newlist = new ArrayList<Device>();
-                    for(Device de : listDevice){
-                        if(de.getAPIkey().contains(newText));
-                        newlist.add(de);
-                    }
-                    CustomAdapter custem2 = new CustomAdapter(MainActivity.this, item, newlist);
-                    lvDevice.setAdapter(custem2);
-                    lvDevice.invalidateViews();
-                    return false;
-                }
-            });
             return true;
         }
 
         return super.onOptionsItemSelected(item_);
     }
+
 
     public void provideGraph(Device devi){
         Intent intent = new Intent(MainActivity.this,GraphActivity.class);
