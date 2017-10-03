@@ -67,14 +67,14 @@ public class ProcessingTime {
         return  result;
     }
 
-    public String[] getSevenDay(GregorianCalendar toDay){
-        String[] thisWeek = new String[7];
+    public ArrayList<GregorianCalendar> getSevenDay(GregorianCalendar toDay){
+        ArrayList<GregorianCalendar> thisWeek = new ArrayList<GregorianCalendar>();
         long millis = 86400000;
-        for(int i = 6; i >= 0; i--){
-            Date date = new Date(toDay.getTimeInMillis() - i*millis);
+        for(int i = 6; i >= 0; i--) {
+            Date date = new Date(toDay.getTimeInMillis() - i * millis);
             GregorianCalendar aDay = new GregorianCalendar();
             aDay.setTime(date);
-            thisWeek[i] = formatDayOfMonth.format(aDay);
+            thisWeek.add(aDay);
         }
         return thisWeek;
     }

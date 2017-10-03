@@ -2,40 +2,49 @@
 <items version="2" >
 
     <item
-        is-multidex="true"
-        jar="/home/hoang/.android/build-cache/5cbe5a116af3b28b76e17895086e1c3deee90535/output/jars/classes.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="/home/nguyenhoang/.android/build-cache/442347998e77abcb0d219f2095afc0ef564426da/output/jars/classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="26.0.1"
-        sha1="88c6386ad8356b89487b43bcaae4827b1abe999c">
-        <dex dex="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_cc10f93cabe63f8e3128beaf309d9279f5a617f2/classes.dex" />
+        sha1="f200454bd6851899efe021d2a4673959986edaed">
+        <dex dex="/home/nguyenhoang/AndroidStudioProjects/ThingSpeak_Client/app/build/intermediates/pre-dexed/debug/classes_e8a45a7518b5032d57fc5c2f8ffd772f3c040dd2.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/nguyenhoang/.android/build-cache/dfeea7da3858519dccb41420ce2f98f8e073aa43/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="838172f1d23787cc52bb558ef989605bc2aecf62">
+        <dex dex="/home/nguyenhoang/AndroidStudioProjects/ThingSpeak_Client/app/build/intermediates/pre-dexed/debug/classes_1e8858ee41cdeb16c5240f1194577d42c9f7875e.jar" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jar="/home/nguyenhoang/AndroidStudioProjects/ThingSpeak_Client/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
         revision="26.0.1"
-        sha1="e84ca57cef0e6e5725f631fbaa11d80001b9aca9">
-        <dex dex="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_da0f883afbb7645f95cff733a1670c21cc4ecfeb/classes.dex" />
+        sha1="5e86ec65a69d43aba44b0b5d8861ad91286729ad">
+        <dex dex="/home/nguyenhoang/AndroidStudioProjects/ThingSpeak_Client/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_61810eed95a6fd22f10178db86cf1900ae9007b2/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jar="/home/nguyenhoang/AndroidStudioProjects/ThingSpeak_Client/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
         optimize="true"
         revision="26.0.1"
         sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
-        <dex dex="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_cd12129a72ac29ded26e7b7525d333d7105461a1/classes.dex" />
+        <dex dex="/home/nguyenhoang/AndroidStudioProjects/ThingSpeak_Client/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_c62ba560642e0998dc7d40ab526b009d94ec45cb/classes.dex" />
     </item>
     <item
-        is-multidex="true"
-        jar="/home/hoang/.android/build-cache/3860cc83c67baf78d9c150a30a9fab2cc467db5e/output/jars/classes.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="/home/nguyenhoang/.android/build-cache/5c901bceb157aa708534fda05071d9d53a6df68e/output/jars/classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="26.0.1"
-        sha1="838172f1d23787cc52bb558ef989605bc2aecf62">
-        <dex dex="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_1cef53fb4ef5ce563d66a04068ca99df37587d26/classes.dex" />
+        sha1="88c6386ad8356b89487b43bcaae4827b1abe999c">
+        <dex dex="/home/nguyenhoang/AndroidStudioProjects/ThingSpeak_Client/app/build/intermediates/pre-dexed/debug/classes_5661cff51ecf21dc6fc2015708fe176f56360ce0.jar" />
     </item>
 
 </items>

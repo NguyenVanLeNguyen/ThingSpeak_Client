@@ -18,7 +18,7 @@ public class Device implements Parcelable {
     private ArrayList<Pair<GregorianCalendar,Integer>> data ;
 
     public Device(String apikey,ArrayList<Pair<GregorianCalendar,Integer>> data){
-        APIkey = apikey;
+        this.APIkey = apikey;
         this.data = data;
 
     }
@@ -27,17 +27,6 @@ public class Device implements Parcelable {
         APIkey = in.readString();
     }
 
-    public static final Creator<Device> CREATOR = new Creator<Device>() {
-        @Override
-        public Device createFromParcel(Parcel in) {
-            return new Device(in);
-        }
-
-        @Override
-        public Device[] newArray(int size) {
-            return new Device[size];
-        }
-    };
 
     public String getAPIkey() { return APIkey; }
 
@@ -54,14 +43,24 @@ public class Device implements Parcelable {
     }
 
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
+    public static final Creator<Device> CREATOR = new Creator<Device>() {
+        @Override
+        public Device createFromParcel(Parcel in) {
+            return new Device(in);
+        }
+
+        @Override
+        public Device[] newArray(int size) {
+            return new Device[size];
+        }
+    };
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+
         parcel.writeString(APIkey);
+        parcel.
+
     }
 
 

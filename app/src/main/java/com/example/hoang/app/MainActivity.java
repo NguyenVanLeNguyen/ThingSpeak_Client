@@ -1,6 +1,7 @@
 package com.example.hoang.app;
 
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.Pair;
 import android.view.MenuInflater;
 import android.view.View;
@@ -28,6 +30,7 @@ import java.util.GregorianCalendar;
 import static com.example.hoang.app.R.layout.item;
 
 public class MainActivity extends AppCompatActivity {
+    public final static  String TAG = "devi";
     public static final String DEVICE = "DeviceSelect";
     ListView lvDevice ;
     private ArrayList<Device> listDevice;
@@ -77,13 +80,13 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Pair<GregorianCalendar,Integer>> arr1 =  new ArrayList<Pair<GregorianCalendar,Integer>>();
         ArrayList<Pair<GregorianCalendar,Integer>> arr2 = new ArrayList<>();
         arr.add(va_1);
-        arr.add(va_1);
-        arr.add(va_1);
-        arr.add(va_1);
-        arr.add(va_1);
-        arr.add(va_1);
-        arr.add(va_1);
-        arr.add(va_1);
+        arr.add(va_2);
+        arr.add(va_3);
+        arr.add(va_4);
+        arr.add(va_5);
+        arr.add(va_6);
+        arr.add(va_7);
+        arr.add(va_8);
 
 
         arr1.add(va_2);
@@ -97,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         listDevice.add(de_1);
         listDevice.add(de_2);
         listDevice.add(de_3);
-        listDevice.add(de_1);
+        /*listDevice.add(de_1);
         listDevice.add(de_2);
         listDevice.add(de_3);
         listDevice.add(de_1);
@@ -105,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         listDevice.add(de_3);
         listDevice.add(de_1);
         listDevice.add(de_2);
-        listDevice.add(de_3);
+        listDevice.add(de_3);*/
 
         CopyList = new ArrayList<>();
         CopyList.addAll(listDevice);
@@ -118,6 +121,11 @@ public class MainActivity extends AppCompatActivity {
         lvDevice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if(finalListDevice.get(i).getData() == null){
+                    Log.d(TAG,"devi is null");
+                }
+                else
+                    Log.d(TAG,"devi is not null");
                 provideGraph(finalListDevice.get(i));
             }
 
@@ -210,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void provideGraph(Device devi){
         Intent intent = new Intent(MainActivity.this,GraphActivity.class);
-        intent.putExtra(DEVICE,devi);
+        intent.putExtra(DEVICE,(Parcelable) devi);
         startActivity(intent);
     }
 }
