@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 import com.github.lzyzsd.circleprogress.CircleProgress;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class CustomAdapter extends ArrayAdapter<com.example.hoang.app.Device> {
             viewholder.tv1 = (TextView) convertView.findViewById(R.id.tv_1);
             viewholder.tv2 = (TextView) convertView.findViewById(R.id.tv_2);
             viewholder.lilao = (LinearLayout) convertView.findViewById(R.id.lnlao_1);
-            viewholder.circle = (CircleProgress) convertView.findViewById(R.id.circle_progress);
+            viewholder.process = (RoundCornerProgressBar) convertView.findViewById(R.id.processbar);
             convertView.setTag(viewholder);
 
         }else {
@@ -57,20 +58,20 @@ public class CustomAdapter extends ArrayAdapter<com.example.hoang.app.Device> {
 
         viewholder.tv2.setText("value: "+String.valueOf(level));
 
-        viewholder.circle.setProgress(level);
+       viewholder.process.setProgress(level);
 
         if(level < 20 && level >= 0) {
             //viewholder.lilao.setBackgroundColor(this.getContext().getResources().getColor(R.color.Dangerous));
-            viewholder.circle.setFinishedColor(this.getContext().getResources().getColor(R.color.Dangerous));
+            viewholder.process.setProgressColor(this.getContext().getResources().getColor(R.color.Dangerous));
         }
         else if(level >= 20 && level < 60) {
             //viewholder.lilao.setBackgroundColor(this.getContext().getResources().getColor(R.color.medidum));
-            viewholder.circle.setFinishedColor(this.getContext().getResources().getColor(R.color.Medidum));
+            viewholder.process.setProgressColor(this.getContext().getResources().getColor(R.color.Medidum));
         }
         else{
 
             //viewholder.lilao.setBackgroundColor(this.getContext().getResources().getColor(R.color.safe));
-            viewholder.circle.setFinishedColor(this.getContext().getResources().getColor(R.color.Safe));
+            viewholder.process.setProgressColor(this.getContext().getResources().getColor(R.color.Safe));
         }
         viewholder.lilao.setBackgroundColor(this.getContext().getResources().getColor(R.color.BackgroundItem));
 
@@ -81,6 +82,6 @@ public class CustomAdapter extends ArrayAdapter<com.example.hoang.app.Device> {
         TextView tv1;
         TextView tv2;
         LinearLayout lilao;
-        CircleProgress circle;
+        RoundCornerProgressBar process;
     }
 }

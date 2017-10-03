@@ -10,28 +10,35 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
+
+import lecho.lib.hellocharts.model.AxisValue;
+import lecho.lib.hellocharts.model.Column;
+import lecho.lib.hellocharts.model.SubcolumnValue;
 
 public class GraphActivity extends AppCompatActivity {
-
-    private LineChart mChart;
+    public  String[] days ;
+    private ArrayList<GregorianCalendar> thisWeek;
+    ProcessingTime processer;
     private Spinner spinner;
     private Device devi;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
-        mChart = (LineChart) findViewById(R.id.lch_level);
-        spinner = (Spinner) findViewById(R.id.sp_mode);
+
+
+        //Get the Data What MainActivity sent
+        Bundle intent = getIntent().getExtras();
+        devi = (Device) intent.getParcelable(MainActivity.DEVICE);
+       /* spinner = (Spinner) findViewById(R.id.sp_mode);
 
         //Get the Data What MainActivity sent
         Bundle intent = getIntent().getExtras();
@@ -55,103 +62,33 @@ public class GraphActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
-        });
+        });*/
 
-        setData();
-        Legend l = mChart.getLegend();
-        l.setForm(Legend.LegendForm.LINE);
-        mChart.setTouchEnabled(true);
 
-        XAxis xa = mChart.getXAxis();
-        xa.setAxisMaximum(24f);
+
+    }
+
+    public void getSevenDay(){
+        DateFormat formatDayOfMonth = new SimpleDateFormat("dd/MM");
+        processer = new ProcessingTime();
+        processer.setFormatDayOfMonth(formatDayOfMonth);
+        int lastIndex = devi.getData().size() - 1;
+        days = processer.getSevenDay(devi.getData().get(lastIndex).first);
 
     }
 
 
-    public ArrayList<Entry> alterTime(ArrayList<Pair<GregorianCalendar,Integer>> list){
-        ArrayList<Entry> yVals = new ArrayList<Entry>();
-        int SizeofData = list.size();
-        GregorianCalendar now = list.get(SizeofData - 1).first;
-        GregorianCalendar thisDay = new GregorianCalendar();
-        return  yVals;
-    }
-    private ArrayList<String> setXAxisValues(){
-        ArrayList<String> xVals = new ArrayList<String>();
-        xVals.add("10");
-        xVals.add("20");
-        xVals.add("30");
-        xVals.add("30.5");
-        xVals.add("40");
 
-        return xVals;
-    }
+    public void generateColumaData(){
 
-    private ArrayList<Entry> setYAxisValues_ToDay(){
-        ArrayList<Entry> yVals = new ArrayList<Entry>();
 
-        /*int numOfEntry = devi.getData().size() - 1;
+        List<AxisValue> axisValues = new ArrayList<AxisValue>();
+        List<Column> columns = new ArrayList<Column>();
+        List<SubcolumnValue> values;
+        for(int i = 6 ; i >= 0; i-- ){
+            values = new ArrayList<SubcolumnValue>();
 
-        for(int i =  numOfEntry;i >= 0 ; i--  ){
-
-        }*/
-        yVals.add(new Entry(0, 60));
-        yVals.add(new Entry(1, 48));
-        yVals.add(new Entry(2,70.5f ));
-        yVals.add(new Entry(3, 100));
-        yVals.add(new Entry(4, 80.9f));
-
-        return yVals;
-    }
-
-    private ArrayList<Entry> setYAxisValues_ThisWeek(){
-        ArrayList<Entry> yVals = new ArrayList<Entry>();
-        /*int numOfEntry = devi.getData().size() - 1;
-
-        for(int i =  numOfEntry;i >= 0 ; i--  ){
-
-        }*/
-        yVals.add(new Entry(0, 60));
-        yVals.add(new Entry(1, 48));
-        yVals.add(new Entry(2,70.5f ));
-        yVals.add(new Entry(3, 100));
-        yVals.add(new Entry(4, 80.9f));
-
-        return yVals;
-    }
-
-    private void setData() {
-        ArrayList<String> xVals = setXAxisValues();
-
-        ArrayList<Entry> yVals = setYAxisValues_ToDay();
-
-        LineDataSet set1;
-
-        // create a dataset and give it a type
-        set1 = new LineDataSet(yVals, "DataSet 1");
-
-        set1.setFillAlpha(110);
-        // set1.setFillColor(Color.RED);
-
-        // set the line to be drawn like this "- - - - - -"
-        //   set1.enableDashedLine(10f, 5f, 0f);
-        // set1.enableDashedHighlightLine(10f, 5f, 0f);
-        set1.setColor(Color.BLACK);
-        set1.setCircleColor(Color.BLACK);
-        set1.setLineWidth(1f);
-        set1.setCircleRadius(3f);
-        set1.setDrawCircleHole(false);
-        set1.setValueTextSize(9f);
-        set1.setDrawFilled(true);
-
-        ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-        dataSets.add(set1); // add the datasets
-
-        // create a data object with the datasets
-        LineData data = new LineData(dataSets);
-
-        // set data
-        mChart.setData(data);
-
+        }
     }
 
 }

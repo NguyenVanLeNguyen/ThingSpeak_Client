@@ -3,6 +3,7 @@ package com.example.hoang.app;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -13,12 +14,29 @@ import java.util.GregorianCalendar;
 
 public class ProcessingTime {
     private DateFormat format;
-
-    public ProcessingTime(DateFormat format) {
+    private DateFormat formatDayOfMonth;
+    public ProcessingTime(DateFormat format,DateFormat dayofmonth) {
         this.format = format;
+        this.formatDayOfMonth = dayofmonth;
     }
 
     public ProcessingTime(){}
+
+    public DateFormat getFormat() {
+        return format;
+    }
+
+    public void setFormat(DateFormat format) {
+        this.format = format;
+    }
+
+    public DateFormat getFormatDayOfMonth() {
+        return formatDayOfMonth;
+    }
+
+    public void setFormatDayOfMonth(DateFormat format_dayofmonth) {
+        this.formatDayOfMonth = format_dayofmonth;
+    }
 
     public GregorianCalendar getTime(String strTime)
     {
@@ -36,7 +54,7 @@ public class ProcessingTime {
         return time;
     }
 
-    public int DistanceBetweenTwoTime(GregorianCalendar time1,GregorianCalendar time2,Long timeUnit)
+    public int distanceBetweenTwoTime(GregorianCalendar time1,GregorianCalendar time2,Long timeUnit)
     {
         int result = 0 ;
         long distance;
@@ -47,5 +65,17 @@ public class ProcessingTime {
         distance = time1.getTimeInMillis() - cTime.getTimeInMillis();
         result = (int) (distance/timeUnit);
         return  result;
+    }
+
+    public String[] getSevenDay(GregorianCalendar toDay){
+        String[] thisWeek = new String[7];
+        long millis = 86400000;
+        for(int i = 6; i >= 0; i--){
+            Date date = new Date(toDay.getTimeInMillis() - i*millis);
+            GregorianCalendar aDay = new GregorianCalendar();
+            aDay.setTime(date);
+            thisWeek[i] = formatDayOfMonth.format(aDay);
+        }
+        return thisWeek;
     }
 }

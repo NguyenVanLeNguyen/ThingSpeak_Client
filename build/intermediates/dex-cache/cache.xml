@@ -3,57 +3,39 @@
 
     <item
         is-multidex="true"
-        jar="/home/nguyenhoang/.gradle/caches/modules-2/files-2.1/com.github.PhilJay/MPAndroidChart/v3.0.2/5d4eb08a326bdbd7fbbddc769666898c9936b282/MPAndroidChart-v3.0.2.jar"
+        jar="/home/hoang/.android/build-cache/5cbe5a116af3b28b76e17895086e1c3deee90535/output/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="26.0.1"
-        sha1="5d4eb08a326bdbd7fbbddc769666898c9936b282">
-        <dex dex="/home/nguyenhoang/AndroidStudioProjects/App/app/build/intermediates/transforms/dex/debug/folders/1000/10/MPAndroidChart-v3.0.2_9fa5c0dffdbe72192448545c7beb98131a6a6e46/classes.dex" />
+        sha1="88c6386ad8356b89487b43bcaae4827b1abe999c">
+        <dex dex="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_cc10f93cabe63f8e3128beaf309d9279f5a617f2/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/nguyenhoang/.android/build-cache/442347998e77abcb0d219f2095afc0ef564426da/output/jars/classes.jar"
+        jar="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
         revision="26.0.1"
-        sha1="f200454bd6851899efe021d2a4673959986edaed">
-        <dex dex="/home/nguyenhoang/AndroidStudioProjects/App/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_e8a45a7518b5032d57fc5c2f8ffd772f3c040dd2/classes.dex" />
+        sha1="e84ca57cef0e6e5725f631fbaa11d80001b9aca9">
+        <dex dex="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_da0f883afbb7645f95cff733a1670c21cc4ecfeb/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/nguyenhoang/AndroidStudioProjects/ThingSpeak_Client/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="26.0.1"
-        sha1="66420f4246e877eeb335ad421d43bd5287337721">
-        <dex dex="/home/nguyenhoang/AndroidStudioProjects/ThingSpeak_Client/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_61810eed95a6fd22f10178db86cf1900ae9007b2/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/nguyenhoang/AndroidStudioProjects/App/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="26.0.1"
-        sha1="fffe957122a33a561b9fef8bea3688afae5248a5">
-        <dex dex="/home/nguyenhoang/AndroidStudioProjects/App/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_4af4cf011766d86bdd22af280ae194cd75be911e/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/nguyenhoang/AndroidStudioProjects/ThingSpeak_Client/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jar="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
         optimize="true"
         revision="26.0.1"
         sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
-        <dex dex="/home/nguyenhoang/AndroidStudioProjects/ThingSpeak_Client/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_c62ba560642e0998dc7d40ab526b009d94ec45cb/classes.dex" />
+        <dex dex="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_cd12129a72ac29ded26e7b7525d333d7105461a1/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/nguyenhoang/AndroidStudioProjects/App/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jar="/home/hoang/.android/build-cache/3860cc83c67baf78d9c150a30a9fab2cc467db5e/output/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="26.0.1"
-        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
-        <dex dex="/home/nguyenhoang/AndroidStudioProjects/App/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_3e7dc6fd651d4781992505f8407d79621f61ec25/classes.dex" />
+        sha1="838172f1d23787cc52bb558ef989605bc2aecf62">
+        <dex dex="/home/hoang/AndroidStudioProjects/App/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_1cef53fb4ef5ce563d66a04068ca99df37587d26/classes.dex" />
     </item>
 
 </items>
