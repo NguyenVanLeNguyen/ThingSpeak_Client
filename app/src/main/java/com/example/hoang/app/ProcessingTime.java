@@ -56,7 +56,7 @@ public class ProcessingTime {
 
     public int distanceBetweenTwoTime(GregorianCalendar time1,GregorianCalendar time2,Long timeUnit)
     {
-        int result = 0 ;
+        int result;
         long distance;
         GregorianCalendar cTime = new GregorianCalendar();
         cTime.setTime(time2.getTime());
@@ -68,7 +68,7 @@ public class ProcessingTime {
     }
 
     public ArrayList<GregorianCalendar> getSevenDay(GregorianCalendar toDay){
-        ArrayList<GregorianCalendar> thisWeek = new ArrayList<GregorianCalendar>();
+        ArrayList<GregorianCalendar> thisWeek = new ArrayList<>();
         long millis = 86400000;
         for(int i = 6; i >= 0; i--) {
             Date date = new Date(toDay.getTimeInMillis() - i * millis);

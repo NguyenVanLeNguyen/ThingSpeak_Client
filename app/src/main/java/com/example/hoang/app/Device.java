@@ -6,6 +6,7 @@ import android.util.Pair;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 
 /**
@@ -25,12 +26,22 @@ public class Device implements Parcelable {
 
     protected Device(Parcel in) {
         APIkey = in.readString();
+        int size = in.readInt();
+        data = new ArrayList<Pair<GregorianCalendar,Integer>>();
+        for(int j = 0 ; j < size; j++){
+            GregorianCalendar date = (GregorianCalendar) in.readValue(GregorianCalendar.class.getClassLoader());
+            Integer value = (Integer) in.readValue(Integer.class.getClassLoader());
+            Pair<GregorianCalendar,Integer> unit = Pair.create(date,value);
+            data.add(unit);
+        }
+       // data = new ArrayList<Pair<GregorianCalendar,Integer>>();
+        //data = in.readArrayList(Pair.class.getClassLoader());
     }
 
 
     public String getAPIkey() { return APIkey; }
 
-    public ArrayList<Pair<GregorianCalendar,Integer>> getData() {
+    public List<Pair<GregorianCalendar,Integer>> getData() {
         return data;
     }
 
@@ -56,11 +67,21 @@ public class Device implements Parcelable {
     };
 
     @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
     public void writeToParcel(Parcel parcel, int i) {
 
         parcel.writeString(APIkey);
-        parcel.
-
+        parcel.writeInt(data.size());
+        for(int j = 0 ; j < data.size(); j ++){
+            parcel.writeValue(data.get(j).first);
+            parcel.writeValue(data.get(j).second);
+        }
+        //parcel.writeList(data);
+        //parcel.write;
     }
 
 

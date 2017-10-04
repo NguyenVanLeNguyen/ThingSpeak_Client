@@ -54,25 +54,29 @@ public class MainActivity extends AppCompatActivity {
         lvDevice = (ListView) findViewById(R.id.liv1);
         listDevice = new ArrayList<Device>();
 
-        GregorianCalendar time1 = new GregorianCalendar(2017,2,2,1,30,30);
+        GregorianCalendar time1 = new GregorianCalendar(2017,2,1,1,30,30);
         GregorianCalendar time2 = new GregorianCalendar(2017,2,2,2,30,30);
-        GregorianCalendar time3 = new GregorianCalendar(2017,2,2,3,30,30);
-        GregorianCalendar time4 = new GregorianCalendar(2017,2,2,4,30,30);
-        GregorianCalendar time5 = new GregorianCalendar(2017,2,2,5,30,30);
-        GregorianCalendar time6 = new GregorianCalendar(2017,2,2,6,30,30);
-        GregorianCalendar time7 = new GregorianCalendar(2017,2,3,0,30,30);
-        GregorianCalendar time8 = new GregorianCalendar(2017,2,3,2,30,30);
-        GregorianCalendar time9 = new GregorianCalendar(2017,2,3,4,30,30);
-        GregorianCalendar time10 = new GregorianCalendar(2017,2,3,5,30,30);
+        GregorianCalendar time3 = new GregorianCalendar(2017,2,3,3,30,30);
+        GregorianCalendar time4 = new GregorianCalendar(2017,2,4,4,30,30);
+        GregorianCalendar time5 = new GregorianCalendar(2017,2,5,5,30,30);
+        GregorianCalendar time6 = new GregorianCalendar(2017,2,6,6,30,30);
+        GregorianCalendar time7 = new GregorianCalendar(2017,2,7,0,30,30);
+        GregorianCalendar time8 = new GregorianCalendar(2017,2,8,2,30,30);
+        GregorianCalendar time8_1 = new GregorianCalendar(2017,2,8,3,30,30);
+        GregorianCalendar time8_2 = new GregorianCalendar(2017,2,8,4,30,30);
+        GregorianCalendar time9 = new GregorianCalendar(2017,2,9,4,30,30);
+        GregorianCalendar time10 = new GregorianCalendar(2017,2,10,5,30,30);
 
         Pair<GregorianCalendar,Integer> va_1 = Pair.create(time1,40);
         Pair<GregorianCalendar,Integer> va_2 = Pair.create(time2,80);
         Pair<GregorianCalendar,Integer> va_3 = Pair.create(time3,10);
-        Pair<GregorianCalendar,Integer> va_4 = Pair.create(time4,10);
-        Pair<GregorianCalendar,Integer> va_5 = Pair.create(time5,10);
+        Pair<GregorianCalendar,Integer> va_4 = Pair.create(time4,30);
+        Pair<GregorianCalendar,Integer> va_5 = Pair.create(time5,40);
         Pair<GregorianCalendar,Integer> va_6 = Pair.create(time6,10);
         Pair<GregorianCalendar,Integer> va_7 = Pair.create(time7,10);
-        Pair<GregorianCalendar,Integer> va_8 = Pair.create(time8,10);
+        Pair<GregorianCalendar,Integer> va_8 = Pair.create(time8,60);
+        Pair<GregorianCalendar,Integer> va_8_1 = Pair.create(time8_1,80);
+        Pair<GregorianCalendar,Integer> va_8_2 = Pair.create(time8_2,100);
         Pair<GregorianCalendar,Integer> va_9 = Pair.create(time9,10);
         Pair<GregorianCalendar,Integer> va_10 = Pair.create(time10,10);
 
@@ -87,6 +91,10 @@ public class MainActivity extends AppCompatActivity {
         arr.add(va_6);
         arr.add(va_7);
         arr.add(va_8);
+        arr.add(va_8_1);
+        arr.add(va_8_2);
+        arr.add(va_9);
+        arr.add(va_10);
 
 
         arr1.add(va_2);
