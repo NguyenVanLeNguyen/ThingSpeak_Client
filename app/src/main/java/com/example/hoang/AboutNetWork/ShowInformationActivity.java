@@ -1,9 +1,11 @@
-package com.example.hoang.app;
+package com.example.hoang.AboutNetWork;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.hoang.app.R;
 
 public class ShowInformationActivity extends AppCompatActivity {
     public static final String APIKEY = "APIkey";

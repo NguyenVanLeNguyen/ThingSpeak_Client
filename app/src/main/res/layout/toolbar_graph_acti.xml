@@ -10,10 +10,10 @@
     local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
     <TextView
+        android:id="@+id/txv_idDevice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="0dp"
-        android:text="Id device"
         android:textSize="16dp"
         />
 
