@@ -78,7 +78,7 @@ public class CustomAdapter extends ArrayAdapter<com.example.hoang.app.Device> {
         return convertView;
     }
 
-    public class ViewHolder{
+    private class ViewHolder{
         TextView tv1;
         TextView tv2;
         LinearLayout lilao;

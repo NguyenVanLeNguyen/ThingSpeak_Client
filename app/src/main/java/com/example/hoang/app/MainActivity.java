@@ -1,11 +1,11 @@
 package com.example.hoang.app;
 
 import android.content.Intent;
-import android.os.Parcelable;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.MenuItemCompat;
+
+//import android.support.design.widget.NavigationView;
+
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
+
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,11 +20,8 @@ import android.widget.ListView;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import static com.example.hoang.app.R.layout.item;
@@ -35,24 +32,22 @@ public class MainActivity extends AppCompatActivity {
     ListView lvDevice ;
     private ArrayList<Device> listDevice;
     private ArrayList<Device> CopyList;
-    private Toolbar toolbar;
-    SearchView searchview ;
     CustomAdapter custem;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //searchview = (SearchView) findViewById(R.id.action_search);
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
+        //ActionBar actionBar = getSupportActionBar();
         //actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
        // actionBar.setDisplayHomeAsUpEnabled(true);
 
 
         lvDevice = (ListView) findViewById(R.id.liv1);
-        listDevice = new ArrayList<Device>();
+        listDevice = new ArrayList<>();
 
         GregorianCalendar time1 = new GregorianCalendar(2017,2,1,1,30,30);
         GregorianCalendar time2 = new GregorianCalendar(2017,2,2,2,30,30);
@@ -80,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
         Pair<GregorianCalendar,Integer> va_9 = Pair.create(time9,10);
         Pair<GregorianCalendar,Integer> va_10 = Pair.create(time10,10);
 
-        ArrayList<Pair<GregorianCalendar,Integer>> arr =  new ArrayList<Pair<GregorianCalendar,Integer>>();
-        ArrayList<Pair<GregorianCalendar,Integer>> arr1 =  new ArrayList<Pair<GregorianCalendar,Integer>>();
+        ArrayList<Pair<GregorianCalendar,Integer>> arr =  new ArrayList<>();
+        ArrayList<Pair<GregorianCalendar,Integer>> arr1 =  new ArrayList<>();
         ArrayList<Pair<GregorianCalendar,Integer>> arr2 = new ArrayList<>();
         arr.add(va_1);
         arr.add(va_2);
@@ -139,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -147,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+       // NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
        // navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
         //final ArrayList<Device> finalListDevice1 = listDevice;
 
@@ -226,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void provideGraph(Device devi){
         Intent intent = new Intent(MainActivity.this,GraphActivity.class);
-        intent.putExtra(DEVICE,(Parcelable) devi);
+        intent.putExtra(DEVICE,devi);
         startActivity(intent);
     }
 }

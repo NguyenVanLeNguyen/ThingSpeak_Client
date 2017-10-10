@@ -27,24 +27,20 @@ import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.LineChartView;
 
-import static android.R.attr.value;
 
 public class GraphActivity extends AppCompatActivity {
 
     private static final String TAG = "devi:";
     private  String[] days = new String[7];
     private int[] valuesEachWeek = new int[7];
-    private String[] hours = new String[24];
     private float[] valuesEachHour = new float[24];
     ProcessingTime processer;
-    //private Spinner spinner;
     private Device devi;
-
     private LineChartView chartTop;
     private ColumnChartView chartBottom;
     ArrayList<GregorianCalendar> thisWeek;
     private LineChartData lineData;
-    private ColumnChartData columnData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,18 +48,16 @@ public class GraphActivity extends AppCompatActivity {
 
         //Get the Data What MainActivity sent
         Bundle intent = getIntent().getExtras();
-        devi = (Device) intent.getParcelable(MainActivity.DEVICE);
+        devi = intent.getParcelable(MainActivity.DEVICE);
 
 
-       // for()
-        //Log.d(TAG, String.valueOf(devi.getData().size()));
+
         chartTop = (LineChartView) findViewById(R.id.chart_top);
 
         // Generate and set data for line chart
 
         // *** BOTTOM COLUMN CHART ***
         chartBottom = (ColumnChartView) findViewById(R.id.chart_bottom);
-
         getSevenDay();
         generateColumaData();
         generateInitialLineData();
@@ -89,7 +83,6 @@ public class GraphActivity extends AppCompatActivity {
         while(j >= 0 ){
             int init_J = j;
             GregorianCalendar day1 = thisWeek.get(j);
-
             for(int k = index; k >= 0; k--){
                 GregorianCalendar day2 = devi.getData().get(k).first;
                 if((day1.get(Calendar.YEAR) == day2.get(Calendar.YEAR))
@@ -111,8 +104,8 @@ public class GraphActivity extends AppCompatActivity {
 
 
     public void generateColumaData(){
-        List<AxisValue> axisValues = new ArrayList<AxisValue>();
-        List<Column> columns = new ArrayList<Column>();
+        List<AxisValue> axisValues = new ArrayList<>();
+        List<Column> columns = new ArrayList<>();
         List<SubcolumnValue> vals;
         for(int i = 0 ; i <= 6; i++ ){
             vals = new ArrayList<>();
@@ -121,7 +114,7 @@ public class GraphActivity extends AppCompatActivity {
             axisValues.add(new AxisValue(i).setLabel(days[i]));
             columns.add(new Column( vals).setHasLabelsOnlyForSelected(true));
         }
-        columnData = new ColumnChartData(columns);
+        ColumnChartData columnData = new ColumnChartData(columns);
         columnData.setAxisXBottom(new Axis(axisValues).setHasLines(true));
         columnData.setAxisYLeft(new Axis().setHasLines(true).setMaxLabelChars(2));
         chartBottom.setColumnChartData(columnData);
@@ -133,8 +126,8 @@ public class GraphActivity extends AppCompatActivity {
     private void generateInitialLineData() {
         int numValues = 24;
 
-        List<AxisValue> axisValues = new ArrayList<AxisValue>();
-        List<PointValue> values = new ArrayList<PointValue>();
+        List<AxisValue> axisValues = new ArrayList<>();
+        List<PointValue> values = new ArrayList<>();
         for (int i = 0; i < numValues; ++i) {
             values.add(new PointValue(i, 0));
             axisValues.add(new AxisValue(i).setLabel(String.valueOf(i)));
@@ -149,7 +142,8 @@ public class GraphActivity extends AppCompatActivity {
         lineData = new LineChartData(lines);
         lineData.setAxisXBottom(new Axis(axisValues).setHasLines(true).setMaxLabelChars(1));
         lineData.setAxisYLeft(new Axis().setHasLines(true).setMaxLabelChars(3));
-
+        chartTop.setValueSelectionEnabled(true);
+        line.setHasLabelsOnlyForSelected(true);
         chartTop.setLineChartData(lineData);
 
         // For build-up animation you have to disable viewport recalculation.
@@ -173,27 +167,27 @@ public class GraphActivity extends AppCompatActivity {
         // Modify data targets
         Line line = lineData.getLines().get(0);// For this example there is always only one line.
         line.setColor(color);
-        //PointValue values = line.getValues();
-        List<PointValue> values = new ArrayList<PointValue>();
+        List<PointValue> values = new ArrayList<>();
         line.setValues(values);
 
-        setDataLine(columIndex);
+        if(columIndex >= 0){
+            setDataLine(columIndex);
 
-        for(int i = 0; i < numValues; i++){
+            for(int i = 0; i < numValues; i++){
 
-            if(valuesEachHour[i] == 0){
+                if(valuesEachHour[i] == 0){}
+                else if(valuesEachHour[i] == -1){
+                    values.add(new PointValue().setTarget((float)i,(float)0));
+                }
+                else{
+                    values.add(new PointValue().setTarget((float)i,valuesEachHour[i]));
+                }
 
+                valuesEachHour[i] = 0;
             }
-            else if(valuesEachHour[i] == -1){
-                values.add(new PointValue().setTarget((float)i,(float)0));
-            }
-            else{
-                values.add(new PointValue().setTarget((float)i,valuesEachHour[i]));
-            }
 
-            valuesEachHour[i] = 0;
         }
-
+        chartTop.startDataAnimation(300);
         /*for(PointValue value : line.getValues()){
             if(value.getY() == -1.0       )
                 line.getValues().remove(value);
@@ -208,28 +202,29 @@ public class GraphActivity extends AppCompatActivity {
         }*/
 
         // Start new data animation with 300ms duration;
-        chartTop.startDataAnimation(300);
+
     }
 
     private void setDataLine(int columIndex){
         int lastIndex = devi.getData().size() - 1;
-        GregorianCalendar date = thisWeek.get(columIndex);
-        //date.set(Calendar.);
-        int index = lastIndex;
-        for(int i = index;i >= 0;i--){
-            GregorianCalendar day2 = devi.getData().get(i).first;
-            if((date.get(Calendar.YEAR) == day2.get(Calendar.YEAR))
-             &&(date.get(Calendar.MONTH) == day2.get(Calendar.MONTH))
-             &&(date.get(Calendar.DATE) == day2.get(Calendar.DATE))){
-                /*PointValue value =line.getValues().get(day2.get(Calendar.HOUR));
-                value.setTarget(value.getX(),(float) devi.getData().get(i).second);*/
+        GregorianCalendar date = (GregorianCalendar) thisWeek.get(columIndex).clone();
+        GregorianCalendar dateToCompare =(GregorianCalendar) thisWeek.get(columIndex).clone() ;
+        dateToCompare.set(Calendar.HOUR,0);
+        dateToCompare.set(Calendar.MINUTE,0);
+        dateToCompare.set(Calendar.SECOND,0);
+        for(int i = lastIndex;i >= 0;i--){
+            GregorianCalendar dateItem =(GregorianCalendar) devi.getData().get(i).first.clone() ;
+
+            if(dateItem.compareTo(dateToCompare) < 0)
+                break;
+            if((date.get(Calendar.YEAR) == dateItem.get(Calendar.YEAR))
+             &&(date.get(Calendar.MONTH) == dateItem.get(Calendar.MONTH))
+             &&(date.get(Calendar.DATE) == dateItem.get(Calendar.DATE))){
                 if(devi.getData().get(i).second == 0){
-                    valuesEachHour[day2.get(Calendar.HOUR)] = -1;
+                    valuesEachHour[dateItem.get(Calendar.HOUR)] = -1;
                 }
                 else
-                    valuesEachHour[day2.get(Calendar.HOUR)] = (float) devi.getData().get(i).second;
-                index = i;
-                //break;
+                    valuesEachHour[dateItem.get(Calendar.HOUR)] = (float) devi.getData().get(i).second;
             }
         }
 
@@ -244,7 +239,7 @@ public class GraphActivity extends AppCompatActivity {
 
         @Override
         public void onValueDeselected() {
-            generateLineData(ChartUtils.COLOR_GREEN, 0,0);
+            generateLineData(ChartUtils.COLOR_GREEN, 0,-1);
 
         }
     }
