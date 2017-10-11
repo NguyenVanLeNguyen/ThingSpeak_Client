@@ -4,6 +4,7 @@ package com.example.hoang.app;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -40,7 +41,7 @@ public class GraphActivity extends AppCompatActivity {
     private ColumnChartView chartBottom;
     ArrayList<GregorianCalendar> thisWeek;
     private LineChartData lineData;
-
+    private TextView id_device;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +62,9 @@ public class GraphActivity extends AppCompatActivity {
         getSevenDay();
         generateColumaData();
         generateInitialLineData();
+
+        id_device = (TextView) findViewById(R.id.txv_idDevice);
+        id_device.setText(devi.getAPIkey());
 
     }
 

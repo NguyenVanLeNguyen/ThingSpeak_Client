@@ -1,10 +1,12 @@
-package com.example.hoang.app;
+package com.example.hoang.AboutNetWork;
 
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+
+import com.example.hoang.app.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,11 +18,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * Created by hoang on 10/09/2017.

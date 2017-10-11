@@ -3,6 +3,7 @@
 
     <item
         is-multidex="true"
+<<<<<<< HEAD
         jar="/home/nguyenhoang/AndroidStudioProjects/ThingSpeak_Client/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
@@ -18,6 +19,23 @@
         revision="26.0.1"
         sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
         <dex dex="/home/nguyenhoang/AndroidStudioProjects/ThingSpeak_Client/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_c62ba560642e0998dc7d40ab526b009d94ec45cb/classes.dex" />
+=======
+        jar="/home/nguyenhoang/AndroidStudioProjects/ThingSpeak_Client/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="/home/nguyenhoang/AndroidStudioProjects/ThingSpeak_Client/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_c62ba560642e0998dc7d40ab526b009d94ec45cb/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/nguyenhoang/AndroidStudioProjects/ThingSpeak_Client/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="db1370b87a803ed39e67391569ba62ebf45b9811">
+        <dex dex="/home/nguyenhoang/AndroidStudioProjects/ThingSpeak_Client/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_61810eed95a6fd22f10178db86cf1900ae9007b2/classes.dex" />
+>>>>>>> master
     </item>
 
 </items>
