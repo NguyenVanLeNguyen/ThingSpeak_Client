@@ -27,7 +27,11 @@
             android:name="com.example.hoang.AboutNetWork.ConnectionReceiver"
             android:enabled="true">
             <intent-filter>
+<<<<<<< HEAD
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+=======
+                <action android:name="android.net.conn.CONNECTACTIVITY_CHANGE" />
+>>>>>>> 6399522a9c2a13883065c707c37e324ce65b53b6
             </intent-filter>
         </receiver>
     </application>

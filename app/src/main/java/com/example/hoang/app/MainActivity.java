@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+<<<<<<< HEAD
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -136,6 +137,11 @@ public class MainActivity extends AppCompatActivity {
             listDevice.add(de_1);
             listDevice.add(de_2);
             listDevice.add(de_3);
+=======
+        /*listDevice.add(de_1);
+        listDevice.add(de_2);
+        listDevice.add(de_3);
+>>>>>>> 6399522a9c2a13883065c707c37e324ce65b53b6
         /*listDevice.add(de_1);
         listDevice.add(de_2);
         listDevice.add(de_3);
@@ -187,46 +193,48 @@ public class MainActivity extends AppCompatActivity {
         MenuItem searchViewItem = menu.findItem(R.id.action_search);
         SearchView searchview = (SearchView) searchViewItem.getActionView();
         searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                listDevice.clear();
-                if(query.length() == 0) {
-                    listDevice.addAll(CopyList);
-                }
-                else
-                {
-                    for(Device de : CopyList)
-                    {
-                        if(de.getAPIkey().contains(query))
-                        {
-                            listDevice.add(de);
-                        }
-                    }
-                }
-                custem.notifyDataSetChanged();
-                return false;
-            }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                listDevice.clear();
-                if(newText.length() == 0) {
-                    listDevice.addAll(CopyList);
-                }
-                else
-                {
-                    for(Device de : CopyList)
-                    {
-                        if(de.getAPIkey().contains(newText))
-                        {
-                            listDevice.add(de);
+            public boolean onQueryTextSubmit(String query) {
+                if (listDevice.size() > 0) {
+                    listDevice.clear();
+                    if (query.length() == 0) {
+                        listDevice.addAll(CopyList);
+                    } else {
+                        for (Device de : CopyList) {
+                            if (de.getAPIkey().contains(query)) {
+                                listDevice.add(de);
+                            }
                         }
                     }
+                    custem.notifyDataSetChanged();
+
                 }
-                custem.notifyDataSetChanged();
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (listDevice.size() > 0) {
+                    listDevice.clear();
+                    if(newText.length() == 0) {
+                        listDevice.addAll(CopyList);
+                    }
+                    else
+                    {
+                        for(Device de : CopyList)
+                        {
+                            if(de.getAPIkey().contains(newText))
+                            {
+                                listDevice.add(de);
+                            }
+                        }
+                    }
+                    custem.notifyDataSetChanged();
+                }
                 return false;
             }
         });
+
 
         return super.onCreateOptionsMenu(menu);
     }
