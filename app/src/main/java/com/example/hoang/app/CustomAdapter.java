@@ -42,10 +42,10 @@ public class CustomAdapter extends ArrayAdapter<com.example.hoang.app.Device> {
             LayoutInflater inflater = (LayoutInflater) con.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.item,null,true);
             viewholder = new ViewHolder();
-            viewholder.tv1 = (TextView) convertView.findViewById(R.id.tv_1);
-            viewholder.tv2 = (TextView) convertView.findViewById(R.id.tv_2);
-            viewholder.lilao = (LinearLayout) convertView.findViewById(R.id.lnlao_1);
-            viewholder.process = (RoundCornerProgressBar) convertView.findViewById(R.id.processbar);
+            viewholder.tv1 =  convertView.findViewById(R.id.tv_1);
+            viewholder.tv2 =  convertView.findViewById(R.id.tv_2);
+            viewholder.lilao =  convertView.findViewById(R.id.lnlao_1);
+            viewholder.process =  convertView.findViewById(R.id.processbar);
             convertView.setTag(viewholder);
 
         }else {

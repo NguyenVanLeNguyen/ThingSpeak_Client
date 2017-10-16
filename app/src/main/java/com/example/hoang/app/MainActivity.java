@@ -4,6 +4,7 @@ import android.content.Intent;
 
 //import android.support.design.widget.NavigationView;
 
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -21,6 +22,8 @@ import android.widget.ListView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.hoang.AboutNetWork.ConnectionReceiver;
+
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
@@ -37,109 +40,34 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //searchview = (SearchView) findViewById(R.id.action_search);
         setSupportActionBar(toolbar);
         //ActionBar actionBar = getSupportActionBar();
         //actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
        // actionBar.setDisplayHomeAsUpEnabled(true);
-
-
-        lvDevice = (ListView) findViewById(R.id.liv1);
-        listDevice = new ArrayList<>();
-
-        GregorianCalendar time1 = new GregorianCalendar(2017,2,1,1,30,30);
-        GregorianCalendar time2 = new GregorianCalendar(2017,2,2,2,30,30);
-        GregorianCalendar time3 = new GregorianCalendar(2017,2,3,3,30,30);
-        GregorianCalendar time4 = new GregorianCalendar(2017,2,4,4,30,30);
-        GregorianCalendar time5 = new GregorianCalendar(2017,2,5,5,30,30);
-        GregorianCalendar time6 = new GregorianCalendar(2017,2,6,6,30,30);
-        GregorianCalendar time7 = new GregorianCalendar(2017,2,7,0,30,30);
-        GregorianCalendar time8 = new GregorianCalendar(2017,2,8,2,30,30);
-        GregorianCalendar time8_1 = new GregorianCalendar(2017,2,8,3,30,30);
-        GregorianCalendar time8_2 = new GregorianCalendar(2017,2,8,4,30,30);
-        GregorianCalendar time9 = new GregorianCalendar(2017,2,9,4,30,30);
-        GregorianCalendar time10 = new GregorianCalendar(2017,2,10,5,30,30);
-
-        Pair<GregorianCalendar,Integer> va_1 = Pair.create(time1,40);
-        Pair<GregorianCalendar,Integer> va_2 = Pair.create(time2,80);
-        Pair<GregorianCalendar,Integer> va_3 = Pair.create(time3,10);
-        Pair<GregorianCalendar,Integer> va_4 = Pair.create(time4,30);
-        Pair<GregorianCalendar,Integer> va_5 = Pair.create(time5,40);
-        Pair<GregorianCalendar,Integer> va_6 = Pair.create(time6,10);
-        Pair<GregorianCalendar,Integer> va_7 = Pair.create(time7,10);
-        Pair<GregorianCalendar,Integer> va_8 = Pair.create(time8,60);
-        Pair<GregorianCalendar,Integer> va_8_1 = Pair.create(time8_1,80);
-        Pair<GregorianCalendar,Integer> va_8_2 = Pair.create(time8_2,100);
-        Pair<GregorianCalendar,Integer> va_9 = Pair.create(time9,10);
-        Pair<GregorianCalendar,Integer> va_10 = Pair.create(time10,10);
-
-        ArrayList<Pair<GregorianCalendar,Integer>> arr =  new ArrayList<>();
-        ArrayList<Pair<GregorianCalendar,Integer>> arr1 =  new ArrayList<>();
-        ArrayList<Pair<GregorianCalendar,Integer>> arr2 = new ArrayList<>();
-        arr.add(va_1);
-        arr.add(va_2);
-        arr.add(va_3);
-        arr.add(va_4);
-        arr.add(va_5);
-        arr.add(va_6);
-        arr.add(va_7);
-        arr.add(va_8);
-        arr.add(va_8_1);
-        arr.add(va_8_2);
-        arr.add(va_9);
-        arr.add(va_10);
-
-
-        arr1.add(va_2);
-        arr2.add(va_3);
-
-        Device de_1 = new Device("0001aaaaa",arr);
-        Device de_2 = new Device("0004ababa",arr1);
-        Device de_3 = new Device("0004ababa",arr2);
-
-
-        /*listDevice.add(de_1);
-        listDevice.add(de_2);
-        listDevice.add(de_3);
-        /*listDevice.add(de_1);
-        listDevice.add(de_2);
-        listDevice.add(de_3);
-        listDevice.add(de_1);
-        listDevice.add(de_2);
-        listDevice.add(de_3);
-        listDevice.add(de_1);
-        listDevice.add(de_2);
-        listDevice.add(de_3);*/
-
-        CopyList = new ArrayList<>();
-        CopyList.addAll(listDevice);
-
-        custem = new CustomAdapter(this, item,listDevice);
-        lvDevice.setAdapter(custem);
-
-        final ArrayList<Device> finalListDevice = listDevice;
-
-        lvDevice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(finalListDevice.get(i).getData() == null){
-                    Log.d(TAG,"devi is null");
-                }
-                else
-                    Log.d(TAG,"devi is not null");
-                provideGraph(finalListDevice.get(i));
-            }
-
-        });
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        lvDevice = (ListView) findViewById(R.id.liv1);
+        listDevice = new ArrayList<>();
+
+
+
+        CopyList = new ArrayList<>();
+        CopyList.addAll(listDevice);
+
+
+            if(ConnectionReceiver.isConnected()){
+
+            }
+
+
+
+
 
 
 
@@ -221,10 +149,32 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item_);
     }
 
+    public ArrayList<Device> getData(String APIkey){
+        ArrayList<Device> devices = new ArrayList<>();
+        return devices;
+    }
 
-    public void provideGraph(Device devi){
+    public void setViewList( ){
+        custem = new CustomAdapter(this, item,listDevice);
+        lvDevice.setAdapter(custem);
+        final ArrayList<Device> finalListDevice = listDevice;
+
+        lvDevice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if(finalListDevice.get(i).getData() == null){
+                }
+                else
+                    provideGraph(finalListDevice.get(i));
+            }
+
+        });
+    }
+
+     public void provideGraph(Device devi){
         Intent intent = new Intent(MainActivity.this,GraphActivity.class);
         intent.putExtra(DEVICE,devi);
         startActivity(intent);
     }
+
 }

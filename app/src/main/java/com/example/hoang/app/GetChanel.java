@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,93 +17,94 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
- * Created by hoang on 10/09/2017.
+ * Created by hoang on 16/10/2017.
  */
 
-public class
-GetData extends AsyncTask<Bundle,String,String> {
+public class GetChanel extends AsyncTask<String,String,Chanel> {
     private Activity mainactivity;
     private Bundle bundle;
 
-    public GetData(Activity m){
+    public GetChanel(Activity m){
         mainactivity = m;
     }
 
     @Override
-    protected  void onPreExecute(){
+    protected  void onPreExecute()
+    {
 
     }
 
     @Override
-    protected String doInBackground(Bundle... bun) {
+    protected Chanel doInBackground(String... bun)
+    {
         String content;
-        bundle = bun[0];
+        Chanel chanel = new Chanel();
         String value = "";
-        content = getJsonfromUrl(bun[0]);
-        String part = bun[0].getString(ShowInformationActivity.PART);
+        content = getJsonChanelfromUrl(bun[0]);
+        if(!content.equals("erron"))
+        {
+            try
+            {
+                JSONObject jsonRoot = new JSONObject(content);
+                JSONArray fields = jsonRoot.getJSONArray("tags");
+                String id = jsonRoot.getString("id");
+                String name = jsonRoot.getString("name");
+                Double longitude = jsonRoot.getDouble("longitude");
+                Double latitude = jsonRoot.getDouble("latitude");
+                chanel.setAPIkey(id);
+                chanel.setName(name);
+                chanel.setLatitude(latitude);
+                chanel.setLongitude(longitude);
 
-        try {
-            JSONObject jobjRoot = new JSONObject(content);
-            JSONArray jarray = jobjRoot.getJSONArray("feeds");
-            value = jarray.getJSONObject(0).optString(part).toString();
+            } catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
 
-
-        } catch (JSONException e){
-            e.printStackTrace();
         }
-        if(value != null)
-            publishProgress(value);
+
+
+        if(content != null)
+        {
+            publishProgress(content);
+            Log.d("InputStream", "ok");
+        }
+
         else
-            publishProgress("null");
-        return null;
+        {
+            publishProgress(null);
+            Log.d("InputStream", "erron");
+        }
+
+        return chanel;
     }
 
     @Override
-    protected void onPostExecute(String result){
+    protected void onPostExecute(Chanel result)
+    {
 
     }
 
     @Override
-    protected void onProgressUpdate(String... values) {
-
-            TextView te;
-            if (bundle.getString(ShowInformationActivity.PART).equals("field1")){
-                te = (TextView) mainactivity.findViewById(R.id.tvw_Tem);
-                te.setText(values[0]);
-            }
-
-            else if(bundle.getString(ShowInformationActivity.PART).equals("field2")){
-                te = (TextView) mainactivity.findViewById(R.id.tvw_Hum);
-                te.setText(values[0]);
-            }
-
-            else {
-
-            }
-
+    protected void onProgressUpdate(String... values)
+    {
 
     }
 
-    private String getJsonfromUrl(Bundle bun){
+    private String getJsonChanelfromUrl(String chanelID)
+    {
         InputStream inputStream = null;
-        InputStreamReader inputStreamreader = null;
         BufferedReader buff = null;
-        String apikey = bun.getString(ShowInformationActivity.APIKEY);
-        String address = "https://api.thingspeak.com/channels/313786/feeds.json?api_key=" + apikey +"&results=1";
+        String address = "https://api.thingspeak.com/channels/" + chanelID +".json";
         StringBuilder result =  new StringBuilder();
         try{
             URL url = new URL(address);
             HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
             httpConn.setAllowUserInteraction(false);
             httpConn.setInstanceFollowRedirects(true);inputStream = url.openStream();
-            httpConn.setRequestMethod("GET");inputStreamreader = new InputStreamReader(inputStream);
+            httpConn.setRequestMethod("GET");
             httpConn.connect();
             int resCode = httpConn.getResponseCode();
             if(resCode == HttpURLConnection.HTTP_OK){
@@ -116,9 +118,9 @@ GetData extends AsyncTask<Bundle,String,String> {
                 return result.toString();
             }
             else{
-                Log.d("InputStream", "enrro");
+                Log.d("InputStream", "erron");
 
-                return null;
+                return "erron";
             }
         }catch (Exception e) {
             e.printStackTrace();
@@ -134,10 +136,10 @@ GetData extends AsyncTask<Bundle,String,String> {
             }
 
         }
-
-        return null;
-
+        return "erron";
     }
+
+
 
 
 }

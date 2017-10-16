@@ -16,7 +16,7 @@
         jumboMode="true"
         optimize="true"
         revision="26.0.1"
-        sha1="cbef7fed518ee966b8875469dc3adbe083665da6">
+        sha1="55d4422e1c8decaea8f760d85f7432d7e328b84c">
         <dex dex="/home/hoang/AndroidStudioProjects/ThingSpeak_Client/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_db2b0da36cde5b486f2c0da4569c1fcd9a5ea248/classes.dex" />
     </item>
     <item

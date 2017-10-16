@@ -14,18 +14,26 @@ import java.util.List;
  */
 
 public class Device implements Parcelable {
-    private String APIkey;
-    //private int color;
+    private String Name;
+    private float lastEntryValue;
+    private GregorianCalendar lastEntryTime;
     private ArrayList<Pair<GregorianCalendar,Integer>> data ;
 
-    public Device(String apikey,ArrayList<Pair<GregorianCalendar,Integer>> data){
-        this.APIkey = apikey;
+    public Device(String name,ArrayList<Pair<GregorianCalendar,Integer>> data){
+        this.Name = name;
         this.data = data;
-
     }
 
+    public Device(String name, float lastEntryValue, GregorianCalendar lastEntryTime) {
+        Name = name;
+        this.lastEntryValue = lastEntryValue;
+        this.lastEntryTime = lastEntryTime;
+    }
+
+
+
     protected Device(Parcel in) {
-        APIkey = in.readString();
+        Name = in.readString();
         int size = in.readInt();
         data = new ArrayList<Pair<GregorianCalendar,Integer>>();
         for(int j = 0 ; j < size; j++){
@@ -39,14 +47,14 @@ public class Device implements Parcelable {
     }
 
 
-    public String getAPIkey() { return APIkey; }
+    public String getAPIkey() { return Name; }
 
     public List<Pair<GregorianCalendar,Integer>> getData() {
         return data;
     }
 
-    public void setAPIkey(String apikey) {
-        this.APIkey = apikey;
+    public void setAPIkey(String name) {
+        this.Name = name;
     }
 
     public void setData(ArrayList<Pair<GregorianCalendar,Integer>> data) {
@@ -74,7 +82,7 @@ public class Device implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
 
-        parcel.writeString(APIkey);
+        parcel.writeString(Name);
         parcel.writeInt(data.size());
         for(int j = 0 ; j < data.size(); j ++){
             parcel.writeValue(data.get(j).first);
