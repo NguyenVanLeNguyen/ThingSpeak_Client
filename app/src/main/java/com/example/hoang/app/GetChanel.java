@@ -1,6 +1,7 @@
 package com.example.hoang.app;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +34,7 @@ import static com.example.hoang.app.R.layout.item;
 
 public class GetChanel extends AsyncTask<String,String,Chanel>
 {
+    ProgressDialog progressDialog;
     private MainActivity mainactivity;
     private ProcessingTime convertTime;
     private DateFormat formatTimeJson = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -45,6 +47,11 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
     {
         convertTime = new ProcessingTime();
         convertTime.setFormat(formatTimeJson);
+        progressDialog = new ProgressDialog(mainactivity);
+        progressDialog.setTitle("Please Wait!");
+        progressDialog.setMessage("Processing...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
     }
 
     @Override
@@ -75,7 +82,7 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
                     String nameDevi = fields.getJSONObject(i).getString("name");
                     //String nameDevi = fields.getJSONObject(i).getString(field);
 
-                    Device device = creatDevice(nameDevi, "field"+j,id,j);
+                    Device device = creatDevice(nameDevi,id,j);
                     chanel.getFields().add(device);
                 }
 
@@ -105,13 +112,8 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
     @Override
     protected void onPostExecute(Chanel result)
     {
-       // mainactivity.setListDevice(result.getFields()) ;
-        /*ListView listDevi = (ListView) mainactivity.findViewById(R.id.liv1);
-        CustomAdapter  custem = new CustomAdapter(mainactivity, item,result.getFields());
-        listDevi.setAdapter(custem);*/
-
+        progressDialog.dismiss();
         mainactivity.getListDevice().addAll(result.getFields());
-
         mainactivity.setList();
     }
 
@@ -132,7 +134,8 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
             URL url = new URL(address);
             HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
             httpConn.setAllowUserInteraction(false);
-            httpConn.setInstanceFollowRedirects(true);inputStream = url.openStream();
+            httpConn.setInstanceFollowRedirects(true);
+            inputStream = url.openStream();
             httpConn.setRequestMethod("GET");
             httpConn.connect();
             int resCode = httpConn.getResponseCode();
@@ -182,7 +185,8 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
             URL url = new URL(address);
             HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
             httpConn.setAllowUserInteraction(false);
-            httpConn.setInstanceFollowRedirects(true);inputStream = url.openStream();
+            httpConn.setInstanceFollowRedirects(true);
+            inputStream = url.openStream();
             httpConn.setRequestMethod("GET");
             httpConn.connect();
             int resCode = httpConn.getResponseCode();
@@ -228,20 +232,21 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
                 return Chanel.GATEWAY_ONLINE;
     }
 
-    private Device creatDevice(String name, String id,String chanelID,int i){
+    private Device creatDevice(String name,String chanelID,int i){
         Device device = new Device();
         device.setName(name);
-        device.setId(id);
+        device.setId(String.valueOf(i));
         InputStream inputStream = null;
         BufferedReader buff = null;
-        String address = "https://api.thingspeak.com/channels/" + chanelID + "/fields/" + i + "/last.json";
+            String address = "https://api.thingspeak.com/channels/" + chanelID + "/fields/" + i + "/last.json";
         StringBuilder result =  new StringBuilder();
         //get json from sever (last entry infomation)
         try{
             URL url = new URL(address);
             HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
             httpConn.setAllowUserInteraction(false);
-            httpConn.setInstanceFollowRedirects(true);inputStream = url.openStream();
+            httpConn.setInstanceFollowRedirects(true);
+            inputStream = url.openStream();
             httpConn.setRequestMethod("GET");
             httpConn.connect();
             int resCode = httpConn.getResponseCode();
@@ -281,7 +286,7 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
                 String strTime = jsonRoot.getString("created_at");
                 GregorianCalendar time = convertTime.getTime(strTime);
                 GregorianCalendar rightNow =(GregorianCalendar) GregorianCalendar.getInstance();
-                if((time.getTimeInMillis() - rightNow.getTimeInMillis()) >= 300000)
+                if((rightNow.getTimeInMillis() - time.getTimeInMillis()) >= 300000)
                     device.setStatus(Device.DEVICE_OOFLINE);
                 else
                     device.setStatus(Device.DEVICE_ONLINE);

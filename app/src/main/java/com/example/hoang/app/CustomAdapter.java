@@ -73,7 +73,7 @@ public class CustomAdapter extends ArrayAdapter<com.example.hoang.app.Device> {
             viewholder.tv3.setText("Online");
             viewholder.tv3.setTextColor(Color.BLUE);
         }
-        else if(device.getStatus() == 1){
+        else if(device.getStatus() == 0){
             viewholder.tv3.setText("Offline");
             viewholder.tv3.setTextColor(Color.RED);
         }

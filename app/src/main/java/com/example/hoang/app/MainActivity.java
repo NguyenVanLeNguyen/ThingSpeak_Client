@@ -1,5 +1,6 @@
 package com.example.hoang.app;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 
 //import android.support.design.widget.NavigationView;
@@ -9,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
@@ -22,6 +24,7 @@ import android.widget.ListView;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.hoang.AboutNetWork.ConnectionReceiver;
 
@@ -53,19 +56,24 @@ public class MainActivity extends AppCompatActivity {
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
-        listDevice = new ArrayList<>();
-        GetChanel getch = new GetChanel(MainActivity.this);
-        getch.execute("313786");
-
-
-
-
-
-
-
-
-
+        if(ConnectionReceiver.isConnected()){
+            listDevice = new ArrayList<>();
+            GetChanel getch = new GetChanel(MainActivity.this);
+            getch.execute("313786");
+        }
+        else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("This Application requires Internet connection,Please enable data/wifi and restart!");
+            builder.setCancelable(false);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                   finish();
+                }
+            });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        }
 
        // NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
        // navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
@@ -153,20 +161,25 @@ public class MainActivity extends AppCompatActivity {
 
         custem = new CustomAdapter(this, item,listDevice);
         lvDevice.setAdapter(custem);
-        Log.d("tag:::","above");
+
         final ArrayList<Device> finalListDevice = listDevice;
 
         lvDevice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if(finalListDevice.get(i).getData() == null){
+                    Log.d("tag:::","listener ");
+
                 }
-                else
+                else{
                     provideGraph(finalListDevice.get(i));
+                    Log.d("tag:::","listener else");
+                }
+
             }
 
         });
-        Log.d("tag:::","behive");
+
     }
 
      public void provideGraph(Device devi){
