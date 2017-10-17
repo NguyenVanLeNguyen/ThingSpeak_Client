@@ -8,9 +8,14 @@ import java.util.ArrayList;
 
 public class Chanel
 {
+    public final static int GATEWAY_OOFLINE = 0;
+    public final static int GATEWAY_ONLINE = 1;
+    public final static int GATEWAY_UNDEFINED = -1;
     private String APIkey;
 
     private String name;
+
+    private int status;
 
     private double longitude;
 
@@ -21,6 +26,7 @@ public class Chanel
     private Chanel chanel;
 
     public Chanel() {
+        this.fields = new ArrayList<>();
     }
 
     public Chanel(String APIkey, String name,double longitude,double latitude) {
@@ -70,10 +76,20 @@ public class Chanel
         this.latitude = latitude;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     public Chanel getInstance(){
         if(chanel != null){
             chanel = new Chanel();
         }
         return chanel;
     }
+
+
 }

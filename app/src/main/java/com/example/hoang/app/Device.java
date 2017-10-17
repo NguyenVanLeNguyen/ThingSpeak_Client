@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Pair;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -14,17 +15,28 @@ import java.util.List;
  */
 
 public class Device implements Parcelable {
+    public final static int DEVICE_ONLINE = 1;
+    public final static int DEVICE_OOFLINE = 0;
+    public final static int DEVICE_UNDEFINED = -1;
+
+
     private String Name;
-    private float lastEntryValue;
+    private String id;
+    private int status;
+    private Double lastEntryValue;
     private GregorianCalendar lastEntryTime;
     private ArrayList<Pair<GregorianCalendar,Integer>> data ;
+
+    public Device(){
+
+    }
 
     public Device(String name,ArrayList<Pair<GregorianCalendar,Integer>> data){
         this.Name = name;
         this.data = data;
     }
 
-    public Device(String name, float lastEntryValue, GregorianCalendar lastEntryTime) {
+    public Device(String name, Double lastEntryValue, GregorianCalendar lastEntryTime) {
         Name = name;
         this.lastEntryValue = lastEntryValue;
         this.lastEntryTime = lastEntryTime;
@@ -42,25 +54,57 @@ public class Device implements Parcelable {
             Pair<GregorianCalendar,Integer> unit = Pair.create(date,value);
             data.add(unit);
         }
-       // data = new ArrayList<Pair<GregorianCalendar,Integer>>();
+        // data = new ArrayList<Pair<GregorianCalendar,Integer>>();
         //data = in.readArrayList(Pair.class.getClassLoader());
     }
 
-
-    public String getAPIkey() { return Name; }
-
     public List<Pair<GregorianCalendar,Integer>> getData() {
         return data;
-    }
-
-    public void setAPIkey(String name) {
-        this.Name = name;
     }
 
     public void setData(ArrayList<Pair<GregorianCalendar,Integer>> data) {
         this.data = data;
     }
 
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
+
+    public Double getLastEntryValue() {
+        return lastEntryValue;
+    }
+
+    public void setLastEntryValue(Double lastEntryValue) {
+        this.lastEntryValue = lastEntryValue;
+    }
+
+    public GregorianCalendar getLastEntryTime() {
+        return lastEntryTime;
+    }
+
+    public void setLastEntryTime(GregorianCalendar lastEntryTime) {
+        this.lastEntryTime = lastEntryTime;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
     public static final Creator<Device> CREATOR = new Creator<Device>() {
         @Override
@@ -88,9 +132,11 @@ public class Device implements Parcelable {
             parcel.writeValue(data.get(j).first);
             parcel.writeValue(data.get(j).second);
         }
-        //parcel.writeList(data);
-        //parcel.write;
-    }
 
+    }
+    @Override
+    public String toString() {
+        return this.Name + this.status;
+    }
 
 }

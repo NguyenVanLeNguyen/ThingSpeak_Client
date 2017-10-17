@@ -13,7 +13,10 @@ import android.widget.TextView;
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 import com.github.lzyzsd.circleprogress.CircleProgress;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -26,12 +29,16 @@ public class CustomAdapter extends ArrayAdapter<com.example.hoang.app.Device> {
     private int Resource;
     private ArrayList<Device> Objects;
     private Context con;
+    private ProcessingTime convertTime;
+    private DateFormat formatTimeJson = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
     public CustomAdapter(Context context, int resource, ArrayList<Device> object){
         super(context,resource,object);
         con = context;
         Resource = resource;
         Objects = object;
+        convertTime = new ProcessingTime();
+        convertTime.setFormat(formatTimeJson);
     }
 
     @Override
@@ -42,8 +49,10 @@ public class CustomAdapter extends ArrayAdapter<com.example.hoang.app.Device> {
             LayoutInflater inflater = (LayoutInflater) con.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.item,null,true);
             viewholder = new ViewHolder();
-            viewholder.tv1 =  convertView.findViewById(R.id.tv_1);
-            viewholder.tv2 =  convertView.findViewById(R.id.tv_2);
+            viewholder.tv1 =  convertView.findViewById(R.id.tv_name);
+            viewholder.tv2 =  convertView.findViewById(R.id.tv_value);
+            viewholder.tv3 =  convertView.findViewById(R.id.tv_status);
+            viewholder.tv4 =  convertView.findViewById(R.id.tv_lastTime);
             viewholder.lilao =  convertView.findViewById(R.id.lnlao_1);
             viewholder.process =  convertView.findViewById(R.id.processbar);
             convertView.setTag(viewholder);
@@ -53,13 +62,28 @@ public class CustomAdapter extends ArrayAdapter<com.example.hoang.app.Device> {
         }
         Device device;
         device = Objects.get(position);
-        Integer level = device.getData().get(device.getData().size() -1 ).second;
-        viewholder.tv1.setText( device.getAPIkey());
+        Double level = device.getLastEntryValue();
+        Date date = device.getLastEntryTime().getTime();
+        String timeUpdate = formatTimeJson.format(date) ;
+        viewholder.tv1.setText( device.getName());
 
         viewholder.tv2.setText("value: "+String.valueOf(level));
 
-       viewholder.process.setProgress(level);
+        if(device.getStatus() == 1){
+            viewholder.tv3.setText("Online");
+            viewholder.tv3.setTextColor(Color.BLUE);
+        }
+        else if(device.getStatus() == 1){
+            viewholder.tv3.setText("Offline");
+            viewholder.tv3.setTextColor(Color.RED);
+        }
+        else{
+            viewholder.tv3.setText("Undefine");
+            viewholder.tv3.setTextColor(Color.GRAY);
+        }
+        viewholder.process.setProgress(level.floatValue());
 
+        viewholder.tv4.setText("update at: "+ timeUpdate );
         if(level < 20 && level >= 0) {
             //viewholder.lilao.setBackgroundColor(this.getContext().getResources().getColor(R.color.Dangerous));
             viewholder.process.setProgressColor(this.getContext().getResources().getColor(R.color.Dangerous));
@@ -69,7 +93,6 @@ public class CustomAdapter extends ArrayAdapter<com.example.hoang.app.Device> {
             viewholder.process.setProgressColor(this.getContext().getResources().getColor(R.color.Medidum));
         }
         else{
-
             //viewholder.lilao.setBackgroundColor(this.getContext().getResources().getColor(R.color.safe));
             viewholder.process.setProgressColor(this.getContext().getResources().getColor(R.color.Safe));
         }
@@ -81,6 +104,8 @@ public class CustomAdapter extends ArrayAdapter<com.example.hoang.app.Device> {
     private class ViewHolder{
         TextView tv1;
         TextView tv2;
+        TextView tv3;
+        TextView tv4;
         LinearLayout lilao;
         RoundCornerProgressBar process;
     }

@@ -4,6 +4,7 @@ import android.content.Intent;
 
 //import android.support.design.widget.NavigationView;
 
+import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 
@@ -32,7 +33,8 @@ import static com.example.hoang.app.R.layout.item;
 public class MainActivity extends AppCompatActivity {
     public final static  String TAG = "devi";
     public static final String DEVICE = "DeviceSelect";
-    ListView lvDevice ;
+    private ListView lvDevice ;
+    private Chanel chanel;
     private ArrayList<Device> listDevice;
     private ArrayList<Device> CopyList;
     CustomAdapter custem;
@@ -52,18 +54,12 @@ public class MainActivity extends AppCompatActivity {
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        lvDevice = (ListView) findViewById(R.id.liv1);
         listDevice = new ArrayList<>();
+        GetChanel getch = new GetChanel(MainActivity.this);
+        getch.execute("313786");
 
 
 
-        CopyList = new ArrayList<>();
-        CopyList.addAll(listDevice);
-
-
-            if(ConnectionReceiver.isConnected()){
-
-            }
 
 
 
@@ -97,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                         listDevice.addAll(CopyList);
                     } else {
                         for (Device de : CopyList) {
-                            if (de.getAPIkey().contains(query)) {
+                            if (de.getName().contains(query)) {
                                 listDevice.add(de);
                             }
                         }
@@ -118,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                     {
                         for(Device de : CopyList)
                         {
-                            if(de.getAPIkey().contains(newText))
+                            if(de.getName().contains(newText))
                             {
                                 listDevice.add(de);
                             }
@@ -149,14 +145,15 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item_);
     }
 
-    public ArrayList<Device> getData(String APIkey){
-        ArrayList<Device> devices = new ArrayList<>();
-        return devices;
-    }
 
-    public void setViewList( ){
+    public void setList(){
+        lvDevice = (ListView) findViewById(R.id.liv1);
+        CopyList = new ArrayList<>();
+        CopyList.addAll(listDevice);
+
         custem = new CustomAdapter(this, item,listDevice);
         lvDevice.setAdapter(custem);
+        Log.d("tag:::","above");
         final ArrayList<Device> finalListDevice = listDevice;
 
         lvDevice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -169,12 +166,20 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+        Log.d("tag:::","behive");
     }
 
      public void provideGraph(Device devi){
         Intent intent = new Intent(MainActivity.this,GraphActivity.class);
-        intent.putExtra(DEVICE,devi);
+        intent.putExtra(DEVICE, devi);
         startActivity(intent);
     }
 
+    public ArrayList<Device> getListDevice() {
+        return listDevice;
+    }
+
+    public void setListDevice(ArrayList<Device> listDevice) {
+        this.listDevice = listDevice;
+    }
 }

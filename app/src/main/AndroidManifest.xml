@@ -21,7 +21,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".GraphActivity" />
-        <activity android:name=".ShowInformationActivity" />
         <activity android:name=".DeviceInfoActivity"></activity>
         <receiver
             android:name="com.example.hoang.AboutNetWork.ConnectionReceiver"

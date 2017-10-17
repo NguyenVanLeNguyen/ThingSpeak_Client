@@ -14,39 +14,59 @@
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_weight="8"
-                android:orientation="vertical">
-               <TextView
-                    android:id="@+id/tv_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:text="TextView"
-                    android:textSize="18dp"
-                    tools:ignore="MissingConstraints"
-                   android:ellipsize="end"
-                   android:maxLines="1"
-                   />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="78dp"
+            android:layout_weight="8"
+            android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tv_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="28dp"
-                    android:text="TextView" />
-            </LinearLayout>
-            <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
-                android:id="@+id/processbar"
+            <TextView
+                android:id="@+id/tv_name"
                 android:layout_width="match_parent"
-                android:layout_weight="2"
-                android:layout_height="48dp"
-                app:rcMax="100"
-                app:rcBackgroundPadding="6dp"
-                app:rcBackgroundColor ="#E0E0E0"
-                app:rcProgressColor="@color/Dangerous"
-                app:rcRadius="10dp"
-                 />
+                android:layout_height="30dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="TextView"
+                android:textSize="18dp"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/tv_value"
+                android:layout_width="match_parent"
+                android:layout_height="26dp"
+                android:text="TextView"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="match_parent"
+                android:layout_height="26dp"
+                android:text="TextView"
+                android:textSize="12dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="78dp"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+        <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
+            android:id="@+id/processbar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+
+            app:rcBackgroundColor="#E0E0E0"
+            app:rcBackgroundPadding="4dp"
+            app:rcMax="100"
+            app:rcProgressColor="@color/Dangerous"
+            app:rcRadius="8dp" />
+         <TextView
+                android:id="@+id/tv_lastTime"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:text="TextView"
+                android:textSize="14dp" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
