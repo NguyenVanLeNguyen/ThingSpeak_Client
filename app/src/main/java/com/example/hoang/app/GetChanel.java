@@ -2,6 +2,8 @@ package com.example.hoang.app;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +28,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import static com.example.hoang.app.MainActivity.SHARED_PREFERENCES_NAME;
 import static com.example.hoang.app.R.layout.item;
 
 /**
@@ -58,12 +61,14 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
     protected Chanel doInBackground(String... bun)
     {
         String content;
-        Chanel chanel = new Chanel();
-        chanel.setStatus(checkStatusGateway(bun[0]));
-        String value = "";
         content = getJsonChanelfromUrl(bun[0]);
+        Chanel chanel = null ;
         if(!content.equals("erron"))
         {
+            chanel = new Chanel();
+            chanel.setStatus(checkStatusGateway(bun[0]));
+            String value = "";
+
             try
             {
                 JSONObject jsonRoot = new JSONObject(content);
@@ -82,7 +87,7 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
                     String nameDevi = fields.getJSONObject(i).getString("name");
                     //String nameDevi = fields.getJSONObject(i).getString(field);
 
-                    Device device = creatDevice(nameDevi,id,j);
+                    Device device = creatDevices(nameDevi,id,j);
                     chanel.getFields().add(device);
                 }
 
@@ -97,7 +102,7 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
         if(content != null)
         {
             publishProgress(content);
-            Log.d("InputStream", "ok");
+
         }
 
         else
@@ -113,8 +118,15 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
     protected void onPostExecute(Chanel result)
     {
         progressDialog.dismiss();
-        mainactivity.getListDevice().addAll(result.getFields());
-        mainactivity.setList();
+        if(result == null) {
+            Toast.makeText(mainactivity,"ID is unvailable",Toast.LENGTH_LONG).show();
+
+            mainactivity.displayDialogChanelID();
+        }
+        else {
+            mainactivity.getListDevice().addAll(result.getFields());
+            mainactivity.setList();
+        }
     }
 
     @Override
@@ -147,15 +159,20 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
                     result.append(line);
                     result.append("\n");
                 }
+                Log.d("InputStream", "ok");
                 return result.toString();
             }
             else{
-                Log.d("InputStream", "erron");
 
                 return "erron";
             }
         }catch (Exception e) {
             e.printStackTrace();
+            /*SharedPreferences sharedPreferences  = mainactivity.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("CHANEL_ID","");
+            Toast.makeText(mainactivity,"Can't load data by this id!",Toast.LENGTH_LONG);
+            mainactivity.displayDialogChanelID();*/
         }finally {
             try {
                 if(inputStream != null && buff != null){
@@ -232,7 +249,7 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
                 return Chanel.GATEWAY_ONLINE;
     }
 
-    private Device creatDevice(String name,String chanelID,int i){
+    private Device creatDevices(String name,String chanelID,int i){
         Device device = new Device();
         device.setName(name);
         device.setId(String.valueOf(i));

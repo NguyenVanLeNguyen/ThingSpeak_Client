@@ -1,12 +1,16 @@
 package com.example.hoang.app;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
 //import android.support.design.widget.NavigationView;
 
+import android.content.SharedPreferences;
 import android.os.Parcelable;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -17,9 +21,12 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Pair;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import android.view.Menu;
@@ -33,14 +40,15 @@ import java.util.GregorianCalendar;
 
 import static com.example.hoang.app.R.layout.item;
 
-public class MainActivity extends AppCompatActivity {
-    public final static  String TAG = "devi";
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+    public final static  String SHARED_PREFERENCES_NAME = "CURRENT_CHANEL";
     public static final String DEVICE = "DeviceSelect";
     private ListView lvDevice ;
-    private Chanel chanel;
+    private SharedPreferences sharedPreferences;
+    private String chanelID;
     private ArrayList<Device> listDevice;
     private ArrayList<Device> CopyList;
-    CustomAdapter custem;
+    private CustomAdapter custem;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,16 +58,28 @@ public class MainActivity extends AppCompatActivity {
         //ActionBar actionBar = getSupportActionBar();
         //actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
        // actionBar.setDisplayHomeAsUpEnabled(true);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        //SharedPreferences.Editor editor = sharedPreferences.edit();
+        sharedPreferences  = this.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+
+
+        chanelID = sharedPreferences.getString("CHANEL_ID","");
         if(ConnectionReceiver.isConnected()){
-            listDevice = new ArrayList<>();
-            GetChanel getch = new GetChanel(MainActivity.this);
-            getch.execute("313786");
+            if (chanelID.equals("") || chanelID.isEmpty()){
+                displayDialogChanelID();
+
+            }
+            else{
+                listDevice = new ArrayList<>();
+                GetChanel getch = new GetChanel(MainActivity.this);
+                getch.execute(chanelID);
+            }
+
         }
         else{
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -75,12 +95,28 @@ public class MainActivity extends AppCompatActivity {
             alertDialog.show();
         }
 
-       // NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-       // navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener( this);
         //final ArrayList<Device> finalListDevice1 = listDevice;
 
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("CHANEL_ID",chanelID);
+        editor.commit();
+
+    }
 
 
 
@@ -150,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+
         return super.onOptionsItemSelected(item_);
     }
 
@@ -182,12 +219,52 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void displayDialogChanelID(){
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.enter_chanelid, null);
+        final EditText enterChanelID = alertLayout.findViewById(R.id.edt_chanelid);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(alertLayout).
+                setPositiveButton("OK" ,new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                chanelID = enterChanelID.getText().toString();
+                listDevice = new ArrayList<>();
+                GetChanel getch = new GetChanel(MainActivity.this);
+                getch.execute(chanelID);
+
+            }
+        })
+         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if(chanelID == null || chanelID.equals("`"))
+                             finish();
+                    }
+                });
+        builder.setTitle("Enter your ChanelID");
+        builder.setMessage("you can file chanelID in Chanel Settings");
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
      public void provideGraph(Device devi){
         Intent intent = new Intent(MainActivity.this,GraphActivity.class);
         intent.putExtra(DEVICE, devi);
         startActivity(intent);
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.changeCN) {
+           displayDialogChanelID();
+        }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
     public ArrayList<Device> getListDevice() {
         return listDevice;
     }
@@ -195,4 +272,6 @@ public class MainActivity extends AppCompatActivity {
     public void setListDevice(ArrayList<Device> listDevice) {
         this.listDevice = listDevice;
     }
+
+
 }
