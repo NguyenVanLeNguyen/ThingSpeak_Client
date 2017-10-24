@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,7 +41,7 @@ import static com.example.hoang.app.R.layout.item;
 
 public class GetChanel extends AsyncTask<String,String,Chanel>
 {
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
     private MainActivity mainactivity;
     private ProcessingTime convertTime;
     private DateFormat formatTimeJson = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -67,7 +71,7 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
         {
             chanel = new Chanel();
             chanel.setStatus(checkStatusGateway(bun[0]));
-            String value = "";
+
 
             try
             {
@@ -125,9 +129,28 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
         }
         else {
             mainactivity.getListDevice().addAll(result.getFields());
-            mainactivity.setList();
+            mainactivity.setList(result.getAPIkey());
         }
+
+        TextView gateWay_name = (TextView) mainactivity.findViewById(R.id.tv_name_gateway);
+        TextView gateWay_status = (TextView) mainactivity.findViewById(R.id.tv_status_gateway);
+        gateWay_name.setText(result.getAPIkey());
+        if(result.getStatus() == Chanel.GATEWAY_ONLINE){
+            gateWay_status.setText("Online");
+            gateWay_status.setTextColor(Color.BLUE);
+        }
+        else{
+            gateWay_status.setText("Offline");
+            gateWay_status.setTextColor(Color.RED);
+        }
+
+        CallbackMap callbackMap = new CallbackMap(result.getLatitude(),result.getLongitude(),"Location of"+result.getAPIkey(),"Unknow");
+        SupportMapFragment mapFragment = (SupportMapFragment) mainactivity.getSupportFragmentManager()
+                .findFragmentById(R.id.mapid);
+        mapFragment.getMapAsync(callbackMap);
+
     }
+
 
     @Override
     protected void onProgressUpdate(String... values)
@@ -295,7 +318,7 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
 
         }
 
-        if(!(result.toString().equals("\"1\"") || result.toString().equals("1")))
+        if(!(result.toString().equals("\"1\"") || result.toString().equals("-1")))
         {
             try {
                 JSONObject jsonRoot = new JSONObject(result.toString());
@@ -309,6 +332,7 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
                     device.setStatus(Device.DEVICE_ONLINE);
                 device.setLastEntryTime(time);
                 device.setLastEntryValue(value);
+                device.setAPIchanel(chanelID);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

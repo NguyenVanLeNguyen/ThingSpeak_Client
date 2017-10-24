@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.android.gms.maps.SupportMapFragment;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ public class GraphActivity extends AppCompatActivity {
 
     private static final String TAG = "devi:";
     private  String[] days = new String[7];
-    private int[] valuesEachWeek = new int[7];
+    private Double[] valuesEachWeek = new Double[7];
     private float[] valuesEachHour = new float[24];
     ProcessingTime processer;
     private Device devi;
@@ -46,6 +48,11 @@ public class GraphActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
 
+        for(int i = 0 ; i<7 ; i++){
+            valuesEachWeek[i] = -1.0;
+            days[i] = "";
+        }
+        Log.d("landmark", "1");
         //Get the Data What MainActivity sent
         Bundle intent = getIntent().getExtras();
         devi = intent.getParcelable(MainActivity.DEVICE);
@@ -61,6 +68,9 @@ public class GraphActivity extends AppCompatActivity {
         getSevenDay();
         generateColumaData();
         generateInitialLineData();
+        Log.d("landmark", "2");
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapid);
 
     }
 
@@ -109,7 +119,8 @@ public class GraphActivity extends AppCompatActivity {
         List<SubcolumnValue> vals;
         for(int i = 0 ; i <= 6; i++ ){
             vals = new ArrayList<>();
-            vals.add(new SubcolumnValue((float)valuesEachWeek[i], ChartUtils.pickColor()));
+            if(valuesEachWeek[i] > 0)
+                vals.add(new SubcolumnValue(valuesEachWeek[i].floatValue(), ChartUtils.pickColor()));
 
             axisValues.add(new AxisValue(i).setLabel(days[i]));
             columns.add(new Column( vals).setHasLabelsOnlyForSelected(true));
@@ -224,7 +235,7 @@ public class GraphActivity extends AppCompatActivity {
                     valuesEachHour[dateItem.get(Calendar.HOUR)] = -1;
                 }
                 else
-                    valuesEachHour[dateItem.get(Calendar.HOUR)] = (float) devi.getData().get(i).second;
+                    valuesEachHour[dateItem.get(Calendar.HOUR)] = devi.getData().get(i).second.floatValue();
             }
         }
 

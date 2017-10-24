@@ -25,7 +25,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <include
-            android:id="@+id/toolbar"
+            android:id="@+id/gateway"
             layout="@layout/location_gateway"
             />
     <RelativeLayout

@@ -31,9 +31,17 @@ import android.widget.ListView;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.hoang.AboutNetWork.ConnectionReceiver;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -49,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ArrayList<Device> listDevice;
     private ArrayList<Device> CopyList;
     private CustomAdapter custem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +72,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapid);
+
 
         //SharedPreferences.Editor editor = sharedPreferences.edit();
         sharedPreferences  = this.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
@@ -101,21 +115,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("CHANEL_ID",chanelID);
-        editor.commit();
-
+        editor.apply();
     }
 
 
@@ -191,26 +196,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void setList(){
+    public void setList(final String APIkey){
+
         lvDevice = (ListView) findViewById(R.id.liv1);
         CopyList = new ArrayList<>();
         CopyList.addAll(listDevice);
 
         custem = new CustomAdapter(this, item,listDevice);
         lvDevice.setAdapter(custem);
-
         final ArrayList<Device> finalListDevice = listDevice;
 
         lvDevice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(finalListDevice.get(i).getData() == null){
-                    Log.d("tag:::","listener ");
-
+                if(finalListDevice.get(i) == null){
+                    Log.d("STATUS; ","null");
                 }
                 else{
-                    provideGraph(finalListDevice.get(i));
-                    Log.d("tag:::","listener else");
+                   GetFieldFeed loadingField = new GetFieldFeed(MainActivity.this);
+                   loadingField.execute(finalListDevice.get(i));
+                    Log.d("STATUS; ",i+"");
                 }
 
             }
@@ -272,6 +277,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void setListDevice(ArrayList<Device> listDevice) {
         this.listDevice = listDevice;
     }
-
 
 }

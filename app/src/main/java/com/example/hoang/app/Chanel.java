@@ -1,6 +1,7 @@
 package com.example.hoang.app;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 /**
  * Created by hoang on 14/10/2017.
@@ -20,6 +21,8 @@ public class Chanel
     private double longitude;
 
     private double latitude;
+
+    private GregorianCalendar lastUpdate;
 
     private ArrayList<Device> fields;
 
@@ -82,6 +85,14 @@ public class Chanel
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public GregorianCalendar getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(GregorianCalendar lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     public Chanel getInstance(){

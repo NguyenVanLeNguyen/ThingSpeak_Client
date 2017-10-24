@@ -21,17 +21,18 @@ public class Device implements Parcelable {
 
 
     private String Name;
+    private String APIchanel;
     private String id;
     private int status;
     private Double lastEntryValue;
     private GregorianCalendar lastEntryTime;
-    private ArrayList<Pair<GregorianCalendar,Integer>> data ;
+    private ArrayList<Pair<GregorianCalendar,Double>> data ;
 
     public Device(){
 
     }
 
-    public Device(String name,ArrayList<Pair<GregorianCalendar,Integer>> data){
+    public Device(String name,ArrayList<Pair<GregorianCalendar,Double>> data){
         this.Name = name;
         this.data = data;
     }
@@ -47,22 +48,22 @@ public class Device implements Parcelable {
     protected Device(Parcel in) {
         Name = in.readString();
         int size = in.readInt();
-        data = new ArrayList<Pair<GregorianCalendar,Integer>>();
+        data = new ArrayList<Pair<GregorianCalendar,Double>>();
         for(int j = 0 ; j < size; j++){
             GregorianCalendar date = (GregorianCalendar) in.readValue(GregorianCalendar.class.getClassLoader());
-            Integer value = (Integer) in.readValue(Integer.class.getClassLoader());
-            Pair<GregorianCalendar,Integer> unit = Pair.create(date,value);
+            Double value = (Double) in.readValue(Double.class.getClassLoader());
+            Pair<GregorianCalendar,Double> unit = Pair.create(date,value);
             data.add(unit);
         }
         // data = new ArrayList<Pair<GregorianCalendar,Integer>>();
         //data = in.readArrayList(Pair.class.getClassLoader());
     }
 
-    public List<Pair<GregorianCalendar,Integer>> getData() {
+    public List<Pair<GregorianCalendar,Double>> getData() {
         return data;
     }
 
-    public void setData(ArrayList<Pair<GregorianCalendar,Integer>> data) {
+    public void setData(ArrayList<Pair<GregorianCalendar,Double>> data) {
         this.data = data;
     }
 
@@ -104,6 +105,14 @@ public class Device implements Parcelable {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getAPIchanel() {
+        return APIchanel;
+    }
+
+    public void setAPIchanel(String APIchanel) {
+        this.APIchanel = APIchanel;
     }
 
     public static final Creator<Device> CREATOR = new Creator<Device>() {
