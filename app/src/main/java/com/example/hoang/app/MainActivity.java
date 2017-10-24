@@ -42,13 +42,14 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 import static com.example.hoang.app.R.layout.item;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,SearchView.OnQueryTextListener{
     public final static  String SHARED_PREFERENCES_NAME = "CURRENT_CHANEL";
     public static final String DEVICE = "DeviceSelect";
     private ListView lvDevice ;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ArrayList<Device> listDevice;
     private ArrayList<Device> CopyList;
     private CustomAdapter custem;
-
+    private  SearchView searchview;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,50 +132,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_tolbar, menu);
         MenuItem searchViewItem = menu.findItem(R.id.action_search);
-        SearchView searchview = (SearchView) searchViewItem.getActionView();
-        searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                if (listDevice.size() > 0) {
-                    listDevice.clear();
-                    if (query.length() == 0) {
-                        listDevice.addAll(CopyList);
-                    } else {
-                        for (Device de : CopyList) {
-                            if (de.getName().contains(query)) {
-                                listDevice.add(de);
-                            }
-                        }
-                    }
-                    custem.notifyDataSetChanged();
-
-                }
-                return false;
-            }
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if (listDevice.size() > 0) {
-                    listDevice.clear();
-                    if(newText.length() == 0) {
-                        listDevice.addAll(CopyList);
-                    }
-                    else
-                    {
-                        for(Device de : CopyList)
-                        {
-                            if(de.getName().contains(newText))
-                            {
-                                listDevice.add(de);
-                            }
-                        }
-                    }
-                    custem.notifyDataSetChanged();
-                }
-                return false;
-            }
-        });
-
+        searchview = (SearchView) searchViewItem.getActionView();
+        searchview.setOnQueryTextListener(this);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -210,12 +169,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if(finalListDevice.get(i) == null){
-                    Log.d("STATUS; ","null");
                 }
                 else{
                    GetFieldFeed loadingField = new GetFieldFeed(MainActivity.this);
                    loadingField.execute(finalListDevice.get(i));
-                    Log.d("STATUS; ",i+"");
+
                 }
 
             }
@@ -278,4 +236,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.listDevice = listDevice;
     }
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        Toast.makeText(this,query,Toast.LENGTH_SHORT).show();
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        Toast.makeText(this,newText,Toast.LENGTH_SHORT).show();
+
+        return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!searchview.isIconified()) {
+            searchview.setIconified(true);
+        } else {
+            super.onBackPressed();
+        }
+    }
 }

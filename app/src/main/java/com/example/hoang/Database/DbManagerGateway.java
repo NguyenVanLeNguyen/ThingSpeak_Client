@@ -16,6 +16,7 @@ public class DbManagerGateway extends SQLiteOpenHelper {
     public static final String DATABASE_NAME ="gateway_list";
     private static final String TABLE_NAME ="gateways";
     private static final String APIKEY ="APIkey";
+    private static final String NAME ="name";
     private static final String LATITUDE ="Latitude";
     private static final String LONGITUDE ="Longitude";
     private static final String LASTUPDTAE ="TimeUpdate";
@@ -31,6 +32,7 @@ public class DbManagerGateway extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String sqlQuery = "CREATE TABLE "+TABLE_NAME +" (" +
                 APIKEY +" INTEGER primary key, "+
+                NAME + " TEXT, "+
                 LATITUDE +" DOUBLE, "+
                 LONGITUDE+" DOUBLE," +
                 LASTUPDTAE +" TEXT)";
@@ -43,7 +45,7 @@ public class DbManagerGateway extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public boolean addGateaưy(String APIkey,double latitude,double longitude,String timeUpdate)
+    public boolean addGateway(String APIkey,double latitude,double longitude,String timeUpdate)
     {
         return  true;
     }

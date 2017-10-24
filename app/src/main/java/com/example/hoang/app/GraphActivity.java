@@ -4,6 +4,7 @@ package com.example.hoang.app;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.SupportMapFragment;
 
@@ -52,12 +53,11 @@ public class GraphActivity extends AppCompatActivity {
             valuesEachWeek[i] = -1.0;
             days[i] = "";
         }
-        Log.d("landmark", "1");
         //Get the Data What MainActivity sent
         Bundle intent = getIntent().getExtras();
         devi = intent.getParcelable(MainActivity.DEVICE);
-
-
+        TextView tvNameDevi = (TextView) findViewById(R.id.device_name);
+        tvNameDevi.setText(devi.getName());
 
         chartTop = (LineChartView) findViewById(R.id.chart_top);
 
@@ -68,7 +68,6 @@ public class GraphActivity extends AppCompatActivity {
         getSevenDay();
         generateColumaData();
         generateInitialLineData();
-        Log.d("landmark", "2");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapid);
 
@@ -86,7 +85,7 @@ public class GraphActivity extends AppCompatActivity {
         thisWeek = processer.getSevenDay(devi.getData().get(lastIndex).first);
         for(int i = 0 ; i <= 6; i++){
             days[i] = formatDayOfMonth.format(thisWeek.get(i).getTime());
-            Log.d(TAG,days[i]);
+            //Log.d(TAG,days[i]);
         }
         int j = 6;
         int index = lastIndex;
@@ -99,7 +98,7 @@ public class GraphActivity extends AppCompatActivity {
                 && (day1.get(Calendar.MONTH) == day2.get(Calendar.MONTH))
                 && (day1.get(Calendar.DATE) == day2.get(Calendar.DATE))){
                     valuesEachWeek[j] = devi.getData().get(k).second;
-                    Log.d(TAG,String.valueOf(valuesEachWeek[j]));
+
                     j--;
                     index = k;
                     break;
@@ -220,7 +219,7 @@ public class GraphActivity extends AppCompatActivity {
         int lastIndex = devi.getData().size() - 1;
         GregorianCalendar date = (GregorianCalendar) thisWeek.get(columIndex).clone();
         GregorianCalendar dateToCompare =(GregorianCalendar) thisWeek.get(columIndex).clone() ;
-        dateToCompare.set(Calendar.HOUR,0);
+        dateToCompare.set(Calendar.HOUR_OF_DAY,0);
         dateToCompare.set(Calendar.MINUTE,0);
         dateToCompare.set(Calendar.SECOND,0);
         for(int i = lastIndex;i >= 0;i--){
@@ -232,10 +231,10 @@ public class GraphActivity extends AppCompatActivity {
              &&(date.get(Calendar.MONTH) == dateItem.get(Calendar.MONTH))
              &&(date.get(Calendar.DATE) == dateItem.get(Calendar.DATE))){
                 if(devi.getData().get(i).second == 0){
-                    valuesEachHour[dateItem.get(Calendar.HOUR)] = -1;
+                    valuesEachHour[dateItem.get(Calendar.HOUR_OF_DAY)] = -1;
                 }
                 else
-                    valuesEachHour[dateItem.get(Calendar.HOUR)] = devi.getData().get(i).second.floatValue();
+                    valuesEachHour[dateItem.get(Calendar.HOUR_OF_DAY)] = devi.getData().get(i).second.floatValue();
             }
         }
 

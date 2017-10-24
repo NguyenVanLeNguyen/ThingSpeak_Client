@@ -1,5 +1,7 @@
 package com.example.hoang.app;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
@@ -37,6 +39,17 @@ public class Chanel
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public Chanel(String APIkey, String name, double longitude, double latitude,String lastUpdate) {
+        this.APIkey = APIkey;
+        this.name = name;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        DateFormat formatTimeJson = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        ProcessingTime converter = new ProcessingTime();
+        converter.setFormat(formatTimeJson);
+        this.lastUpdate = converter.getTime(lastUpdate);
     }
 
     public String getAPIkey() {

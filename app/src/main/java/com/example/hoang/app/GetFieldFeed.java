@@ -42,11 +42,16 @@ public class GetFieldFeed extends AsyncTask<Device,String,Device> {
         super.onPreExecute();
         convertTime = new ProcessingTime();
         convertTime.setFormat(formatTimeJson);
-
+        progressDialog = new ProgressDialog(mainactivity);
+        progressDialog.setTitle("Please Wait!");
+        progressDialog.setMessage("Processing...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
     }
 
     @Override
     protected void onPostExecute(Device devi) {
+        progressDialog.dismiss();
         super.onPostExecute(devi);
         mainactivity.provideGraph(devi);
 
@@ -69,16 +74,20 @@ public class GetFieldFeed extends AsyncTask<Device,String,Device> {
         ArrayList<Pair<GregorianCalendar,Double>> feeds = new ArrayList<>();
         String APIchanel = devi.getAPIchanel();
         String id = devi.getId();
-        Long lastEntryTimeMilis = devi.getLastEntryTime().getTimeInMillis();
+       Long lastEntryTimeMilis = devi.getLastEntryTime().getTimeInMillis();
         GregorianCalendar landmarkSevenDayAgo = new GregorianCalendar();
-        landmarkSevenDayAgo.setTimeInMillis(lastEntryTimeMilis-127800000);
+        landmarkSevenDayAgo.setTimeInMillis(lastEntryTimeMilis - 518400000);
         landmarkSevenDayAgo.set(Calendar.HOUR,0);
         landmarkSevenDayAgo.set(Calendar.MINUTE,0);
         landmarkSevenDayAgo.set(Calendar.SECOND,0);
         Date date = landmarkSevenDayAgo.getTime();
+        landmarkSevenDayAgo = null;
         String landmarkToString = formatTimeJson.format(date);
         String address = "https://api.thingspeak.com/channels/" + APIchanel + "/fields/" + id +".json?start=" + landmarkToString ;
+       // Log.d("url",address);
         StringBuilder result =  new StringBuilder();
+        int hour = 0;
+        int dateofmonth = 0;
         try{
             URL url = new URL(address);
             HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
@@ -118,17 +127,29 @@ public class GetFieldFeed extends AsyncTask<Device,String,Device> {
         try{
             JSONObject jsonRoot = new JSONObject(result.toString());
             JSONArray data = jsonRoot.getJSONArray("feeds");
-            for(int i = 0; i < data.length(); i++ ){
+
+
+            for(int i = (data.length()-1); i >= 0; i-- ){
                 JSONObject jObject = data.getJSONObject(i);
                 GregorianCalendar time = convertTime.getTime(jObject.getString("created_at"));
-                if(jObject.isNull("field" + id)) {
-                    Log.d("status: ","null");
+                int h = time.get(Calendar.HOUR_OF_DAY);
+                int d = time.get(Calendar.DATE);
+                if((h != hour) || (d != dateofmonth)){
+                    if(jObject.isNull("field" + id)) {
+                      //  Log.d("status: ","null");
 
+                    }
+                    else {
+                        double value = jObject.getDouble("field" + id);
+                        feeds.add(0,Pair.create(time,value));
+                        //Log.d("hour:", time.get(Calendar.HOUR_OF_DAY)+"");
+                        //Log.d("date:", time.get(Calendar.DATE)+"");
+                    }
+
+                    hour = h;
+                    dateofmonth = d;
                 }
-                else {
-                    double value = jObject.getDouble("field" + id);
-                    feeds.add(Pair.create(time,value));
-                }
+
 
 
             }
