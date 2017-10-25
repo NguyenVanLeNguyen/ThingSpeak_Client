@@ -11,12 +11,12 @@
     android:layout_height="wrap_content"
     android:minHeight="?attr/actionBarSize"
     android:background="?attr/colorPrimary"
-    local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    local:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+    local:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar">
 </android.support.v7.widget.Toolbar>
 
     <com.miguelcatalan.materialsearchview.MaterialSearchView
-        android:id="@+id/search_view"
+        android:id="@+id/search_view_q"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 </FrameLayout>

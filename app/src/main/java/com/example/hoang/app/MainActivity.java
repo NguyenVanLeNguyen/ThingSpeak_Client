@@ -7,69 +7,61 @@ import android.content.Intent;
 //import android.support.design.widget.NavigationView;
 
 import android.content.SharedPreferences;
-import android.os.Parcelable;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
+import android.speech.RecognizerIntent;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.util.Pair;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.example.hoang.AboutNetWork.ConnectionReceiver;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
+
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
+
 
 import static com.example.hoang.app.R.layout.item;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     public final static  String SHARED_PREFERENCES_NAME = "CURRENT_CHANEL";
     public static final String DEVICE = "DeviceSelect";
+    public static final String RESULTSEARCH = "ResultSearch";
     private ListView lvDevice ;
     private SharedPreferences sharedPreferences;
     private String chanelID;
     private ArrayList<Device> listDevice;
     private ArrayList<Device> CopyList;
     private CustomAdapter custem;
-    private  MaterialSearchView searchView;
+    private MaterialSearchView searchView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        searchView = (MaterialSearchView) findViewById(R.id.search_view);
+        searchView = (MaterialSearchView) findViewById(R.id.search_view_q);
 
-        //ActionBar actionBar = getSupportActionBar();
-        //actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
-       // actionBar.setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+       actionBar.setDisplayHomeAsUpEnabled(true);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -94,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 GetChanel getch = new GetChanel(MainActivity.this);
                 getch.execute(chanelID);
             }
+
 
         }
         else{
@@ -129,35 +122,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_tolbar, menu);
         MenuItem item = menu.findItem(R.id.action_search);
         searchView.setMenuItem(item);
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item_) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item_.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_search) {
-            return true;
-        }
-
-
-        return super.onOptionsItemSelected(item_);
-    }
 
 
     public void setList(final String APIkey){
 
         lvDevice = (ListView) findViewById(R.id.liv1);
-        CopyList = new ArrayList<>();
-        CopyList.addAll(listDevice);
+
 
         custem = new CustomAdapter(this, item,listDevice);
         lvDevice.setAdapter(custem);
@@ -177,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
         });
+
 
     }
 
@@ -207,11 +187,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-     public void provideGraph(Device devi){
-        Intent intent = new Intent(MainActivity.this,GraphActivity.class);
-        intent.putExtra(DEVICE, devi);
-        startActivity(intent);
-    }
+
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -226,13 +203,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    public ArrayList<Device> getListDevice() {
-        return listDevice;
-    }
 
-    public void setListDevice(ArrayList<Device> listDevice) {
-        this.listDevice = listDevice;
-    }
 
     @Override
     public void onBackPressed() {
@@ -243,16 +214,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public void searchViewCode(){
-        searchView.setEllipsize(true);
+    public void searchViewCode(final ArrayList<Device> Devices){
+       String[] strArr = new String[Devices.size()];
+        int i = 0;
+        for (Device de : Devices) {
+            strArr[i] = de.getName();
+            i++;
+        }
+       searchView.setEllipsize(true);
+        searchView.setSuggestions(strArr);
+
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                ArrayList<Device> serArr = new ArrayList<>();
+                    if (Devices.size() > 0){
+                        for (Device devi : Devices) {
+                            if(devi.getName().contains(query)){
+                                try {
+                                    Device aDevi =(Device) devi.clone();
+                                    serArr.add(aDevi);
+                                } catch (CloneNotSupportedException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        }
+                    }
+
+
+                Intent intent = new Intent(MainActivity.this,ResultSearchDevice.class);
+                intent.putParcelableArrayListExtra(RESULTSEARCH,serArr);
+                startActivity(intent);
+
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+
                 return false;
             }
         });
@@ -268,18 +268,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
-
+        searchView.dismissSuggestions();
     }
 
-    /**
-     * Dispatch incoming result to the correct fragment.
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MaterialSearchView.REQUEST_VOICE && resultCode == RESULT_OK) {
+            ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            if (matches != null && matches.size() > 0) {
+                String searchWrd = matches.get(0);
+                if (!TextUtils.isEmpty(searchWrd)) {
+                    searchView.setQuery(searchWrd, false);
+                }
+            }
+
+            return;
+        }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public ArrayList<Device> getListDevice() {
+        return listDevice;
+    }
+
+    public void setListDevice(ArrayList<Device> listDevice) {
+        this.listDevice = listDevice;
+    }
+
+    public MaterialSearchView getSearchView() {
+        return searchView;
+    }
+
+    public void setSearchView(MaterialSearchView searchView) {
+        this.searchView = searchView;
     }
 }

@@ -26,7 +26,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".GraphActivity" />
-        <activity android:name=".DeviceInfoActivity"></activity>
+        <activity android:name=".ResultSearchDevice">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.hoang.app.MainActivity" />
+        </activity>
         <receiver
             android:name="com.example.hoang.AboutNetWork.ConnectionReceiver"
             android:enabled="true">

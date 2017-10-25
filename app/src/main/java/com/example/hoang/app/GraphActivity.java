@@ -55,7 +55,7 @@ public class GraphActivity extends AppCompatActivity {
         }
         //Get the Data What MainActivity sent
         Bundle intent = getIntent().getExtras();
-        devi = intent.getParcelable(MainActivity.DEVICE);
+        devi = intent.getParcelable("Graph");
         TextView tvNameDevi = (TextView) findViewById(R.id.device_name);
         tvNameDevi.setText(devi.getName());
 

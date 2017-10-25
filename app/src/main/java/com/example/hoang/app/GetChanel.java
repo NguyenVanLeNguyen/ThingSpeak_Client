@@ -85,6 +85,7 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
                     chanel.getFields().add(device);
                 }
 
+               // mainactivity.searchViewCode(chanel.getFields());
             } catch (JSONException e)
             {
                 e.printStackTrace();
@@ -111,12 +112,15 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
     protected void onPostExecute(Chanel result)
     {
         progressDialog.dismiss();
+
+
         if(result == null) {
             Toast.makeText(mainactivity,"ID is unvailable",Toast.LENGTH_LONG).show();
 
             mainactivity.displayDialogChanelID();
         }
         else {
+          //  mainactivity.searchViewCode();
             mainactivity.getListDevice().addAll(result.getFields());
             mainactivity.setList(result.getAPIkey());
         }
@@ -140,7 +144,11 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
                 .findFragmentById(R.id.mapid);
         mapFragment.getMapAsync(callbackMap);
 
-        mainactivity.searchViewCode();
+
+
+        mainactivity.searchViewCode(result.getFields());
+
+
 
     }
 
