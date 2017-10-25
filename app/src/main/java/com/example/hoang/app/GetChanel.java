@@ -140,6 +140,8 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
                 .findFragmentById(R.id.mapid);
         mapFragment.getMapAsync(callbackMap);
 
+        mainactivity.searchViewCode();
+
     }
 
 

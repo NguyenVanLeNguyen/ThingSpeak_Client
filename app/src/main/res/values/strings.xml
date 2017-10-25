@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">App</string>
     <string name="action_search">Search</string>
+    <string name="abc_search_hint">Search</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

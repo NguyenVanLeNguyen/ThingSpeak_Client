@@ -49,7 +49,7 @@ import java.util.GregorianCalendar;
 
 import static com.example.hoang.app.R.layout.item;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,SearchView.OnQueryTextListener{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     public final static  String SHARED_PREFERENCES_NAME = "CURRENT_CHANEL";
     public static final String DEVICE = "DeviceSelect";
     private ListView lvDevice ;
@@ -58,13 +58,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ArrayList<Device> listDevice;
     private ArrayList<Device> CopyList;
     private CustomAdapter custem;
-    private  SearchView searchview;
+    private  MaterialSearchView searchView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        searchView = (MaterialSearchView) findViewById(R.id.search_view);
+
         //ActionBar actionBar = getSupportActionBar();
         //actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
        // actionBar.setDisplayHomeAsUpEnabled(true);
@@ -75,8 +77,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.mapid);
 
 
         //SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -131,10 +131,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_tolbar, menu);
-        MenuItem searchViewItem = menu.findItem(R.id.action_search);
-        searchview = (SearchView) searchViewItem.getActionView();
-        searchview.setOnQueryTextListener(this);
-
+        MenuItem item = menu.findItem(R.id.action_search);
+        searchView.setMenuItem(item);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -237,24 +235,51 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public boolean onQueryTextSubmit(String query) {
-        Toast.makeText(this,query,Toast.LENGTH_SHORT).show();
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        Toast.makeText(this,newText,Toast.LENGTH_SHORT).show();
-
-        return false;
-    }
-
-    @Override
     public void onBackPressed() {
-        if (!searchview.isIconified()) {
-            searchview.setIconified(true);
+        if (searchView.isSearchOpen()) {
+            searchView.closeSearch();
         } else {
             super.onBackPressed();
         }
+    }
+
+    public void searchViewCode(){
+        searchView.setEllipsize(true);
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+            @Override
+            public void onSearchViewShown() {
+
+            }
+
+            @Override
+            public void onSearchViewClosed() {
+
+            }
+        });
+
+    }
+
+    /**
+     * Dispatch incoming result to the correct fragment.
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
