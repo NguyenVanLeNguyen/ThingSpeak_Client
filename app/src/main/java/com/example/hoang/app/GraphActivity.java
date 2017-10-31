@@ -3,10 +3,8 @@ package com.example.hoang.app;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
 
-import com.google.android.gms.maps.SupportMapFragment;
+import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -33,7 +31,6 @@ import lecho.lib.hellocharts.view.LineChartView;
 
 public class GraphActivity extends AppCompatActivity {
 
-    private static final String TAG = "devi:";
     private  String[] days = new String[7];
     private Double[] valuesEachWeek = new Double[7];
     private float[] valuesEachHour = new float[24];
@@ -55,7 +52,10 @@ public class GraphActivity extends AppCompatActivity {
         }
         //Get the Data What MainActivity sent
         Bundle intent = getIntent().getExtras();
-        devi = intent.getParcelable("Graph");
+
+        assert intent != null;
+        devi = intent.getParcelable(MainActivity.DEVICE);
+
         TextView tvNameDevi = (TextView) findViewById(R.id.device_name);
         tvNameDevi.setText(devi.getName());
 
@@ -68,8 +68,7 @@ public class GraphActivity extends AppCompatActivity {
         getSevenDay();
         generateColumaData();
         generateInitialLineData();
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.mapid);
+
 
     }
 
@@ -85,7 +84,7 @@ public class GraphActivity extends AppCompatActivity {
         thisWeek = processer.getSevenDay(devi.getData().get(lastIndex).first);
         for(int i = 0 ; i <= 6; i++){
             days[i] = formatDayOfMonth.format(thisWeek.get(i).getTime());
-            //Log.d(TAG,days[i]);
+
         }
         int j = 6;
         int index = lastIndex;
@@ -168,7 +167,7 @@ public class GraphActivity extends AppCompatActivity {
         chartTop.setZoomType(ZoomType.HORIZONTAL);
     }
 
-    private void generateLineData(int color, float range,int columIndex) {
+    private void generateLineData(int color,int columIndex) {
         // Cancel last animation if not finished.
         int numValues = 24;
 
@@ -185,11 +184,10 @@ public class GraphActivity extends AppCompatActivity {
 
             for(int i = 0; i < numValues; i++){
 
-                if(valuesEachHour[i] == 0){}
-                else if(valuesEachHour[i] == -1){
+                if(valuesEachHour[i] == -1){
                     values.add(new PointValue().setTarget((float)i,(float)0));
                 }
-                else{
+                else if(valuesEachHour[i] != 0){
                     values.add(new PointValue().setTarget((float)i,valuesEachHour[i]));
                 }
 
@@ -244,12 +242,12 @@ public class GraphActivity extends AppCompatActivity {
 
         @Override
         public void onValueSelected(int columnIndex, int subcolumnIndex, SubcolumnValue value) {
-            generateLineData(value.getColor(), 100,columnIndex);
+            generateLineData(value.getColor(),columnIndex);
         }
 
         @Override
         public void onValueDeselected() {
-            generateLineData(ChartUtils.COLOR_GREEN, 0,-1);
+            generateLineData(ChartUtils.COLOR_GREEN,-1);
 
         }
     }

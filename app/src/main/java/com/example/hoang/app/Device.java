@@ -14,7 +14,7 @@ import java.util.List;
  * Created by hoang on 10/09/2017.
  */
 
-public class Device implements Parcelable,Cloneable {
+public class Device implements Parcelable {
     public final static int DEVICE_ONLINE = 1;
     public final static int DEVICE_OOFLINE = 0;
     public final static int DEVICE_UNDEFINED = -1;
@@ -29,7 +29,7 @@ public class Device implements Parcelable,Cloneable {
     private ArrayList<Pair<GregorianCalendar,Double>> data ;
 
     public Device(){
-        data = new ArrayList<>();
+
     }
 
     public Device(String name,ArrayList<Pair<GregorianCalendar,Double>> data){
@@ -47,13 +47,8 @@ public class Device implements Parcelable,Cloneable {
 
     protected Device(Parcel in) {
         Name = in.readString();
-        APIchanel = in.readString();
-        id = in.readString();
-        lastEntryValue = in.readDouble();
-        lastEntryTime = (GregorianCalendar) in.readValue(GregorianCalendar.class.getClassLoader());
-        status = in.readInt();
         int size = in.readInt();
-        data = new ArrayList<>();
+        data = new ArrayList<Pair<GregorianCalendar,Double>>();
         for(int j = 0 ; j < size; j++){
             GregorianCalendar date = (GregorianCalendar) in.readValue(GregorianCalendar.class.getClassLoader());
             Double value = (Double) in.readValue(Double.class.getClassLoader());
@@ -141,24 +136,16 @@ public class Device implements Parcelable,Cloneable {
     public void writeToParcel(Parcel parcel, int i) {
 
         parcel.writeString(Name);
-        parcel.writeString(APIchanel);
-        parcel.writeString(id);
-        parcel.writeDouble(lastEntryValue);
-        parcel.writeValue(lastEntryTime);
-        parcel.writeInt(status);
         parcel.writeInt(data.size());
         for(int j = 0 ; j < data.size(); j ++){
-                parcel.writeValue(data.get(j).first);
-                parcel.writeValue(data.get(j).second);
-            }
+            parcel.writeValue(data.get(j).first);
+            parcel.writeValue(data.get(j).second);
+        }
+
     }
     @Override
     public String toString() {
         return this.Name + this.status;
     }
 
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
 }

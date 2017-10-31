@@ -4,6 +4,7 @@ import android.app.Application;
 
 /**
  * Created by hoang on 11/10/2017.
+ *
  */
 
 public class WifiApp extends Application {

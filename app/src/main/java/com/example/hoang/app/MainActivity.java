@@ -1,5 +1,9 @@
 package com.example.hoang.app;
 
+import android.annotation.SuppressLint;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,19 +11,18 @@ import android.content.Intent;
 //import android.support.design.widget.NavigationView;
 
 import android.content.SharedPreferences;
-import android.speech.RecognizerIntent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;;
+import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -30,63 +33,69 @@ import android.widget.ListView;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
 import com.example.hoang.AboutNetWork.ConnectionReceiver;
+import com.example.hoang.Notification.CheckNote;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
-
 import java.util.ArrayList;
-
 
 import static com.example.hoang.app.R.layout.item;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     public final static  String SHARED_PREFERENCES_NAME = "CURRENT_CHANEL";
     public static final String DEVICE = "DeviceSelect";
-    public static final String RESULTSEARCH = "ResultSearch";
     private ListView lvDevice ;
     private SharedPreferences sharedPreferences;
     private String chanelID;
     private ArrayList<Device> listDevice;
-    private ArrayList<Device> CopyList;
-    private CustomAdapter custem;
-    private MaterialSearchView searchView;
+    private  MaterialSearchView searchView;
+    private JobScheduler jobScheduler;
+    private JobInfo jobInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        searchView = (MaterialSearchView) findViewById(R.id.search_view_q);
+        searchView = (MaterialSearchView) findViewById(R.id.search_view);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
-       actionBar.setDisplayHomeAsUpEnabled(true);
+        //ActionBar actionBar = getSupportActionBar();
+        //actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+       // actionBar.setDisplayHomeAsUpEnabled(true);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-
-
-
         //SharedPreferences.Editor editor = sharedPreferences.edit();
+
         sharedPreferences  = this.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 
-
         chanelID = sharedPreferences.getString("CHANEL_ID","");
+
         if(ConnectionReceiver.isConnected()){
             if (chanelID.equals("") || chanelID.isEmpty()){
                 displayDialogChanelID();
 
             }
             else{
+                ComponentName serviceComponent = new ComponentName(this, CheckNote.class);
+                JobInfo.Builder builder = new JobInfo.Builder(1, serviceComponent);
+                builder.setPeriodic( 20000 );
+                builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED );
+                builder.setRequiresCharging(false);
+                builder.setRequiresDeviceIdle(false);
+                PersistableBundle bundle = new PersistableBundle();
+                bundle.putString("abc",chanelID);
+                builder.setExtras(bundle);
+                jobInfo = builder.build();
+                jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+                startJob();
                 listDevice = new ArrayList<>();
                 GetChanel getch = new GetChanel(MainActivity.this);
                 getch.execute(chanelID);
             }
-
 
         }
         else{
@@ -96,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                   finish();
+                    finish();
                 }
             });
             AlertDialog alertDialog = builder.create();
@@ -122,23 +131,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_tolbar, menu);
         MenuItem item = menu.findItem(R.id.action_search);
         searchView.setMenuItem(item);
-        return true;
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item_) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item_.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_search) {
+            return true;
+        }
+
+
+        return super.onOptionsItemSelected(item_);
     }
 
 
-
-
-    public void setList(final String APIkey){
+    public void setList(){
 
         lvDevice = (ListView) findViewById(R.id.liv1);
 
-
-        custem = new CustomAdapter(this, item,listDevice);
+        CustomAdapter custem = new CustomAdapter(this, item, listDevice);
         lvDevice.setAdapter(custem);
         final ArrayList<Device> finalListDevice = listDevice;
 
@@ -157,12 +178,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         });
 
-
     }
 
     public void displayDialogChanelID(){
         LayoutInflater inflater = getLayoutInflater();
-        View alertLayout = inflater.inflate(R.layout.enter_chanelid, null);
+        @SuppressLint("InflateParams") View alertLayout = inflater.inflate(R.layout.enter_chanelid, null);
         final EditText enterChanelID = alertLayout.findViewById(R.id.edt_chanelid);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(alertLayout).
@@ -187,12 +207,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-
-
+     public void provideGraph(Device devi){
+        Intent intent = new Intent(MainActivity.this,GraphActivity.class);
+        intent.putExtra(DEVICE, devi);
+        startActivity(intent);
+    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -203,7 +226,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
+    public ArrayList<Device> getListDevice() {
+        return listDevice;
+    }
 
     @Override
     public void onBackPressed() {
@@ -214,45 +239,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public void searchViewCode(final ArrayList<Device> Devices){
-       String[] strArr = new String[Devices.size()];
-        int i = 0;
-        for (Device de : Devices) {
-            strArr[i] = de.getName();
-            i++;
-        }
-       searchView.setEllipsize(true);
-        searchView.setSuggestions(strArr);
-
+    public void searchViewCode(){
+        searchView.setEllipsize(true);
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                ArrayList<Device> serArr = new ArrayList<>();
-                    if (Devices.size() > 0){
-                        for (Device devi : Devices) {
-                            if(devi.getName().contains(query)){
-                                try {
-                                    Device aDevi =(Device) devi.clone();
-                                    serArr.add(aDevi);
-                                } catch (CloneNotSupportedException e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        }
-                    }
-
-
-                Intent intent = new Intent(MainActivity.this,ResultSearchDevice.class);
-                intent.putParcelableArrayListExtra(RESULTSEARCH,serArr);
-                startActivity(intent);
-
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
                 return false;
             }
         });
@@ -268,39 +264,64 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
-        searchView.dismissSuggestions();
+
     }
+    public void updateData(View view){
+        sharedPreferences  = this.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 
+        chanelID = sharedPreferences.getString("CHANEL_ID","");
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == MaterialSearchView.REQUEST_VOICE && resultCode == RESULT_OK) {
-            ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            if (matches != null && matches.size() > 0) {
-                String searchWrd = matches.get(0);
-                if (!TextUtils.isEmpty(searchWrd)) {
-                    searchView.setQuery(searchWrd, false);
-                }
+        if(ConnectionReceiver.isConnected()){
+            if (chanelID.equals("") || chanelID.isEmpty()){
+                displayDialogChanelID();
+
+            }
+            else{
+                ComponentName serviceComponent = new ComponentName(this, CheckNote.class);
+                JobInfo.Builder builder = new JobInfo.Builder(1, serviceComponent);
+                builder.setPeriodic( 20000 );
+                builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED );
+                builder.setRequiresCharging(false);
+                builder.setRequiresDeviceIdle(false);
+                PersistableBundle bundle = new PersistableBundle();
+                bundle.putString("abc",chanelID);
+                builder.setExtras(bundle);
+                jobInfo = builder.build();
+                jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+                startJob();
+                listDevice = new ArrayList<>();
+                GetChanel getch = new GetChanel(MainActivity.this);
+                getch.execute(chanelID);
             }
 
-            return;
         }
-        super.onActivityResult(requestCode, resultCode, data);
+        else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("This Application requires Internet connection,Please enable data/wifi and restart!");
+            builder.setCancelable(false);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                }
+            });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        }
     }
 
-    public ArrayList<Device> getListDevice() {
-        return listDevice;
+
+    public void startJob() {
+        jobScheduler.schedule(jobInfo);
+        Log.d("status","start button");
     }
 
-    public void setListDevice(ArrayList<Device> listDevice) {
-        this.listDevice = listDevice;
+
+    public void cancelJob() {
+        jobScheduler.cancelAll();
+        Log.d("status","stop button");
+
     }
 
-    public MaterialSearchView getSearchView() {
-        return searchView;
-    }
 
-    public void setSearchView(MaterialSearchView searchView) {
-        this.searchView = searchView;
-    }
 }

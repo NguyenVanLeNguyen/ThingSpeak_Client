@@ -1,10 +1,7 @@
 package com.example.hoang.app;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Pair;
 
@@ -31,15 +28,13 @@ import java.util.GregorianCalendar;
 
 public class GetFieldFeed extends AsyncTask<Device,String,Device> {
     private ProgressDialog progressDialog;
-    private AppCompatActivity Activity;
-    private ResultSearchDevice resultSearchDevice;
+    private MainActivity mainactivity;
     private ProcessingTime convertTime;
     private DateFormat formatTimeJson = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
 
-    public GetFieldFeed(AppCompatActivity Activity) {
-        this.Activity = Activity;
-
+    public GetFieldFeed(MainActivity mainactivity) {
+        this.mainactivity = mainactivity;
     }
 
     @Override
@@ -47,10 +42,7 @@ public class GetFieldFeed extends AsyncTask<Device,String,Device> {
         super.onPreExecute();
         convertTime = new ProcessingTime();
         convertTime.setFormat(formatTimeJson);
-        if(resultSearchDevice!= null)
-            progressDialog = new ProgressDialog(resultSearchDevice);
-        else
-            progressDialog = new ProgressDialog(Activity);
+        progressDialog = new ProgressDialog(mainactivity);
         progressDialog.setTitle("Please Wait!");
         progressDialog.setMessage("Processing...");
         progressDialog.setCancelable(false);
@@ -61,8 +53,7 @@ public class GetFieldFeed extends AsyncTask<Device,String,Device> {
     protected void onPostExecute(Device devi) {
         progressDialog.dismiss();
         super.onPostExecute(devi);
-        //mainactivity.provideGraph(devi);
-        provideGraph(devi);
+        mainactivity.provideGraph(devi);
 
     }
 
@@ -168,11 +159,5 @@ public class GetFieldFeed extends AsyncTask<Device,String,Device> {
         return feeds;
     }
 
-
-    private void provideGraph(Device devi){
-        Intent intent = new Intent(Activity,GraphActivity.class);
-        intent.putExtra("Graph", devi);
-        Activity.startActivity(intent);
-    }
 
 }

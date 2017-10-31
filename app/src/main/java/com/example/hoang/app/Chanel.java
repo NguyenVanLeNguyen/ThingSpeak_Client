@@ -9,7 +9,8 @@ import java.util.GregorianCalendar;
  * Created by hoang on 14/10/2017.
  */
 
-public class Chanel extends ArrayList<Device> {
+public class Chanel
+{
     public final static int GATEWAY_OOFLINE = 0;
     public final static int GATEWAY_ONLINE = 1;
     public final static int GATEWAY_UNDEFINED = -1;

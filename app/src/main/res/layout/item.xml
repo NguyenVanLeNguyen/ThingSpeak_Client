@@ -2,9 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/BackgroundColor">
     <LinearLayout
         android:id="@+id/lnlao_1"
         android:layout_width="match_parent"
@@ -28,21 +29,24 @@
                 android:maxLines="1"
                 android:text="TextView"
                 android:textSize="18dp"
-                tools:ignore="MissingConstraints" />
+                tools:ignore="MissingConstraints"
+                android:textColor="@color/TextColor"/>
 
             <TextView
                 android:id="@+id/tv_value"
                 android:layout_width="match_parent"
                 android:layout_height="26dp"
                 android:text="TextView"
-                android:textSize="14dp" />
+                android:textSize="14dp"
+                android:textColor="@color/TextColor"/>
 
             <TextView
                 android:id="@+id/tv_status"
                 android:layout_width="match_parent"
                 android:layout_height="26dp"
                 android:text="TextView"
-                android:textSize="12dp" />
+                android:textSize="12dp"
+                android:textColor="@color/TextColor"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -59,13 +63,15 @@
             app:rcBackgroundPadding="4dp"
             app:rcMax="100"
             app:rcProgressColor="@color/Dangerous"
-            app:rcRadius="8dp" />
+            app:rcRadius="8dp"
+            android:layout_marginTop="6dp"/>
          <TextView
                 android:id="@+id/tv_lastTime"
                 android:layout_width="match_parent"
                 android:layout_height="34dp"
                 android:text="TextView"
-                android:textSize="14dp" />
+                android:textSize="14dp"
+                android:textColor="@color/TextColor"/>
         </LinearLayout>
     </LinearLayout>
 

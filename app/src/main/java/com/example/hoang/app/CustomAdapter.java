@@ -96,7 +96,6 @@ public class CustomAdapter extends ArrayAdapter<com.example.hoang.app.Device> {
             //viewholder.lilao.setBackgroundColor(this.getContext().getResources().getColor(R.color.safe));
             viewholder.process.setProgressColor(this.getContext().getResources().getColor(R.color.Safe));
         }
-        viewholder.lilao.setBackgroundColor(this.getContext().getResources().getColor(R.color.BackgroundItem));
 
         return convertView;
     }

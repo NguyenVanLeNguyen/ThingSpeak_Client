@@ -15,7 +15,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/BackgroundColor">
     <include
         android:id="@+id/toolbar_graph"
         layout="@layout/toolbar"
@@ -23,27 +24,35 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+      >
         <include
             android:id="@+id/gateway"
-            layout="@layout/location_gateway"
-            />
+            layout="@layout/location_gateway" />
+
     <RelativeLayout
         android:layout_weight="5"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
 
+        <TextView
+            android:id="@+id/txv_devices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Devices"
+            android:textColor="@color/TextColor"/>
         <ListView
                 android:id="@+id/liv1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:divider="#FF9900"
-                android:dividerHeight="6px"
+                android:divider="#BDBDBD"
+                android:dividerHeight="2px"
                 tools:layout_editor_absoluteX="0dp"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/txv_devices"
+
                 android:layout_alignParentStart="true" />
 
         <android.support.design.widget.FloatingActionButton
@@ -55,8 +64,9 @@
             android:layout_marginBottom="16dp"
             android:layout_marginRight="16dp"
             android:clickable="true"
-            android:src="@drawable/ic_add"
-            app:elevation="4dp"/>
+            android:src="@drawable/ic_update_black"
+            app:elevation="4dp"
+            android:onClick="updateData"/>
 
     </RelativeLayout>
     </LinearLayout>

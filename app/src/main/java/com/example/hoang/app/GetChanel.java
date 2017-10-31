@@ -85,7 +85,6 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
                     chanel.getFields().add(device);
                 }
 
-               // mainactivity.searchViewCode(chanel.getFields());
             } catch (JSONException e)
             {
                 e.printStackTrace();
@@ -111,24 +110,22 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
     @Override
     protected void onPostExecute(Chanel result)
     {
-        progressDialog.dismiss();
-
-
+         progressDialog.dismiss();
         if(result == null) {
             Toast.makeText(mainactivity,"ID is unvailable",Toast.LENGTH_LONG).show();
 
             mainactivity.displayDialogChanelID();
         }
         else {
-          //  mainactivity.searchViewCode();
             mainactivity.getListDevice().addAll(result.getFields());
-            mainactivity.setList(result.getAPIkey());
+            mainactivity.setList();
         }
 
         TextView gateWay_name = (TextView) mainactivity.findViewById(R.id.tv_name_gateway);
         TextView gateWay_status = (TextView) mainactivity.findViewById(R.id.tv_status_gateway);
         TextView gateWay_update = (TextView) mainactivity.findViewById(R.id.tv_lastupdate_gateway);
 
+        assert result != null;
         gateWay_name.setText(result.getAPIkey());
         if(result.getStatus() == Chanel.GATEWAY_ONLINE){
             gateWay_status.setText("Online");
@@ -144,10 +141,7 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
                 .findFragmentById(R.id.mapid);
         mapFragment.getMapAsync(callbackMap);
 
-
-
-        mainactivity.searchViewCode(result.getFields());
-
+        //mainactivity.searchViewCode();
 
 
     }

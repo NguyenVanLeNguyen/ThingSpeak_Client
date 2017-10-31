@@ -2,12 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/changeCN"
-        android:title = "Change ChanelID">
+        android:title = "Change ChanelID"
+        android:icon="@drawable/ic_action_change_apikey">
     </item>
 
     <item
-        android:id="@+id/Setting"
-        android:title = "Setting">
+        android:id="@+id/Setting_repeat"
+        android:title = "Setting repeat check"
+        android:icon="@drawable/ic_action_repeat_check">
     </item>
 
 </menu>
