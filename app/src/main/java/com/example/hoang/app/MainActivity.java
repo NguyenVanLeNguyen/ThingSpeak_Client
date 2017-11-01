@@ -11,65 +11,77 @@ import android.content.Intent;
 //import android.support.design.widget.NavigationView;
 
 import android.content.SharedPreferences;
+import android.database.MatrixCursor;
 import android.os.PersistableBundle;
+import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.DrawerLayout;
 
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
+
 import android.widget.EditText;
 import android.widget.ListView;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
 
 import com.example.hoang.AboutNetWork.ConnectionReceiver;
 import com.example.hoang.Notification.CheckNote;
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
+
 
 import java.util.ArrayList;
 
 import static com.example.hoang.app.R.layout.item;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends ShowListDevice implements NavigationView.OnNavigationItemSelectedListener,SearchView.OnSuggestionListener,SearchView.OnQueryTextListener{
     public final static  String SHARED_PREFERENCES_NAME = "CURRENT_CHANEL";
-    public static final String DEVICE = "DeviceSelect";
+    public static final String RESULTSEARCH = "ResultSearch";
     private ListView lvDevice ;
     private SharedPreferences sharedPreferences;
     private String chanelID;
     private ArrayList<Device> listDevice;
-    private  MaterialSearchView searchView;
+    private SearchView searchView;
     private JobScheduler jobScheduler;
     private JobInfo jobInfo;
+
+
+    private SimpleCursorAdapter mAdapter;
+    private static  String[] DEVICES ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        searchView = (MaterialSearchView) findViewById(R.id.search_view);
+        searchView = new SearchView(this);
 
         //ActionBar actionBar = getSupportActionBar();
         //actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
        // actionBar.setDisplayHomeAsUpEnabled(true);
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        //SharedPreferences.Editor editor = sharedPreferences.edit();
-
+        hint_sugges();
         sharedPreferences  = this.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 
         chanelID = sharedPreferences.getString("CHANEL_ID","");
@@ -80,18 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
             else{
-                ComponentName serviceComponent = new ComponentName(this, CheckNote.class);
-                JobInfo.Builder builder = new JobInfo.Builder(1, serviceComponent);
-                builder.setPeriodic( 20000 );
-                builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED );
-                builder.setRequiresCharging(false);
-                builder.setRequiresDeviceIdle(false);
-                PersistableBundle bundle = new PersistableBundle();
-                bundle.putString("abc",chanelID);
-                builder.setExtras(bundle);
-                jobInfo = builder.build();
-                jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-                startJob();
+
                 listDevice = new ArrayList<>();
                 GetChanel getch = new GetChanel(MainActivity.this);
                 getch.execute(chanelID);
@@ -133,8 +134,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_tolbar, menu);
-        MenuItem item = menu.findItem(R.id.action_search);
-        searchView.setMenuItem(item);
+        MenuItem searchViewItem = menu.findItem(R.id.action_search);
+        searchView = (SearchView) searchViewItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+        searchView.setOnSuggestionListener(this);
+        searchView.setSuggestionsAdapter(mAdapter);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -166,13 +171,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         lvDevice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(finalListDevice.get(i) == null){
-                }
-                else{
-                   GetFieldFeed loadingField = new GetFieldFeed(MainActivity.this);
-                   loadingField.execute(finalListDevice.get(i));
+                if(ConnectionReceiver.isConnected()) {
+                    if (finalListDevice.get(i) == null) {
+                    } else {
+                        GetFieldFeed loadingField = new GetFieldFeed(MainActivity.this);
+                        loadingField.execute(finalListDevice.get(i));
 
+                    }
                 }
+                else
+                    Toast.makeText(MainActivity.this,"network error",Toast.LENGTH_SHORT).show();
 
             }
 
@@ -207,10 +215,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-     public void provideGraph(Device devi){
+
+    @Override
+    public void provideGraph(Device devi){
         Intent intent = new Intent(MainActivity.this,GraphActivity.class);
         intent.putExtra(DEVICE, devi);
         startActivity(intent);
+
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -232,40 +243,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        if (searchView.isSearchOpen()) {
-            searchView.closeSearch();
+         if (!searchView.isIconified()) {
+        searchView.setIconified(true);
         } else {
             super.onBackPressed();
         }
     }
 
-    public void searchViewCode(){
-        searchView.setEllipsize(true);
-        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-
-        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
-            @Override
-            public void onSearchViewShown() {
-
-            }
-
-            @Override
-            public void onSearchViewClosed() {
-
-            }
-        });
-
-    }
     public void updateData(View view){
         sharedPreferences  = this.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 
@@ -288,10 +272,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 builder.setExtras(bundle);
                 jobInfo = builder.build();
                 jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-                startJob();
+               // startJob();
                 listDevice = new ArrayList<>();
                 GetChanel getch = new GetChanel(MainActivity.this);
                 getch.execute(chanelID);
+                Toast.makeText(MainActivity.this,"update",Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -310,12 +295,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-
     public void startJob() {
+        ComponentName serviceComponent = new ComponentName(this, CheckNote.class);
+        JobInfo.Builder builder = new JobInfo.Builder(1, serviceComponent);
+        builder.setPeriodic( 20000 );
+        builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED );
+        builder.setRequiresCharging(false);
+        builder.setRequiresDeviceIdle(false);
+        PersistableBundle bundle = new PersistableBundle();
+        bundle.putString("abc",chanelID);
+        builder.setExtras(bundle);
+        jobInfo = builder.build();
+        jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
         jobScheduler.schedule(jobInfo);
         Log.d("status","start button");
     }
-
 
     public void cancelJob() {
         jobScheduler.cancelAll();
@@ -324,4 +318,72 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        ArrayList<Device> serArr = new ArrayList<>();
+
+        ArrayList<Device> Devices = listDevice;
+        if (Devices.size() > 0){
+            for (Device devi : Devices) {
+                if(devi.getName().contains(query)){
+                    try {
+                        Device aDevi =(Device) devi.clone();
+                        serArr.add(aDevi);
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        }
+
+
+        Intent intent = new Intent(MainActivity.this,ResultSearchActivity.class);
+        intent.putParcelableArrayListExtra(RESULTSEARCH,serArr);
+        startActivity(intent);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        giveSuggestions(newText);
+        return false;
+    }
+
+    private void giveSuggestions(String query) {
+        final MatrixCursor cursor = new MatrixCursor(new String[]{BaseColumns._ID, "cityName"});
+        for (int i = 0; i < DEVICES.length; i++) {
+            if (DEVICES[i].toLowerCase().contains(query.toLowerCase()))
+                cursor.addRow(new Object[]{i, DEVICES[i]});
+        }
+        mAdapter.changeCursor(cursor);
+
+    }
+
+    private void hint_sugges(){
+        final String[] from = new String[]{"cityName"};
+        final int[] to = new int[]{android.R.id.text1};
+        mAdapter = new SimpleCursorAdapter(getApplicationContext(),
+                R.layout.hint_row,
+                null,
+                from,
+                to,
+                CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+    }
+
+    @Override
+    public boolean onSuggestionSelect(int position) {
+
+        return true;
+    }
+
+    @Override
+    public boolean onSuggestionClick(int position) {
+        searchView.setQuery(mAdapter.getCursor().getString(position+1),false);
+        return true;
+    }
+
+    public static void setDEVICES(String[] DEVICES) {
+        MainActivity.DEVICES = DEVICES;
+    }
 }

@@ -4,4 +4,7 @@
     <string name="abc_search_hint">Search</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="status_off">Offline</string>
+    <string name="status_on">Online</string>
+    <string name="status_undefine">Undefine</string>
 </resources>

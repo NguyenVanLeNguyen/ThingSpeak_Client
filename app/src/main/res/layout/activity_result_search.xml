@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.hoang.app.ResultSearchActivity"
+    android:background="@color/BackgroundColor">
+
+    <include
+        android:id="@+id/toolbar_result"
+        layout="@layout/toolbar_result_search"
+        />
+
+    <LinearLayout
+        android:id="@+id/lilao_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/toolbar_result">
+        <TextView
+            android:id="@+id/txv_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Results"
+            android:textSize="16dp"
+            android:textColor="@color/TextColor"
+            android:layout_weight="3"
+        />
+        <TextView
+            android:id="@+id/txv_number_of_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:textColor="@color/TextColor"
+            android:layout_weight="7"
+            />
+    </LinearLayout>
+    <ListView
+            android:id="@+id/liv_listResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lilao_result">
+
+    </ListView>
+
+</RelativeLayout>

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#424242</color>
+    <color name="colorPrimary">#212121</color>
     <color name="colorPrimaryDark">#212121</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>
-    <color name="colorAccent">#9E9E9E</color>
-    <color name="Dangerous">#757575</color>
+    <color name="colorAccent">#616161</color>
+    <color name="Dangerous">#FF3D00</color>
     <color name="Safe">#1DE9B6</color>
     <color name="Medidum">#FFB74D</color>
     <color name="BackgroundItem">#FCE4EC</color>
     <color name="TextColor">#F5F5F5</color>
-    <color name="BackgroundColor">#BDBDBD</color>
+    <color name="BackgroundColor">#424242</color>
 </resources>

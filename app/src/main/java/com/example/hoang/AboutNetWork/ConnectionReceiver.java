@@ -22,6 +22,7 @@ public class ConnectionReceiver extends BroadcastReceiver {
         ConnectivityManager
                 cm = (ConnectivityManager) WifiApp.getInstance().getApplicationContext()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
+
         assert cm != null;
         NetworkInfo ni = cm.getActiveNetworkInfo();
         return ni != null && ni.isConnectedOrConnecting();

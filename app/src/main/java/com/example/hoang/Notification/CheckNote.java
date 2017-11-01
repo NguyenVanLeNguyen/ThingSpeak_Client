@@ -1,6 +1,7 @@
 package com.example.hoang.Notification;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,6 +11,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.Window;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.hoang.app.MainActivity;
 import com.example.hoang.app.R;
@@ -24,7 +30,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-
 public class CheckNote extends JobService {
 
 
@@ -35,8 +40,30 @@ public class CheckNote extends JobService {
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
         Log.d("TAG","onStart");
-        CheckServer check = new CheckServer();
-        check.execute(jobParameters);
+
+        /*CheckServer check = new CheckServer();
+        check.execute(jobParameters);*/
+        //
+
+
+                //getDecorView().findViewById(android.R.id.content);
+        //LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //assert inflater != null;
+        //@SuppressLint("InflateParams")
+       // View mv = inflater.inflate(R.layout.item,null,true);
+
+
+        //t.setText("API chanel");
+       /* ListView lv = mv.findViewById(R.id.liv1);
+        CustomAdapter cus  = (CustomAdapter) lv.getAdapter();
+        GregorianCalendar now = new GregorianCalendar();
+        Random rand = new Random();
+        double value = rand.nextInt(100);
+
+        cus.getObjects().get(0).setLastEntryTime(now);
+        cus.getObjects().get(0).setLastEntryValue(value);
+        cus.notifyDataSetChanged();*/
+        Toast.makeText(getApplicationContext(),"change:",Toast.LENGTH_SHORT).show();
         return true;
     }
 

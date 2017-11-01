@@ -31,7 +31,6 @@ public class CallbackMap implements OnMapReadyCallback {
 
         //mMap.setMyLocationEnabled(true);
 
-
         myMap.addMarker(new MarkerOptions()
                 .title(content)
                 .snippet(lastUpdate)

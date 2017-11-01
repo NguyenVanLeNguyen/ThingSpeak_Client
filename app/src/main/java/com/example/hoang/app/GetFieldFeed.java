@@ -28,21 +28,20 @@ import java.util.GregorianCalendar;
 
 public class GetFieldFeed extends AsyncTask<Device,String,Device> {
     private ProgressDialog progressDialog;
-    private MainActivity mainactivity;
+    private ShowListDevice activity;
     private ProcessingTime convertTime;
     private DateFormat formatTimeJson = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
 
-    public GetFieldFeed(MainActivity mainactivity) {
-        this.mainactivity = mainactivity;
+    public GetFieldFeed(ShowListDevice activity) {
+        this.activity = activity;
     }
-
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
         convertTime = new ProcessingTime();
         convertTime.setFormat(formatTimeJson);
-        progressDialog = new ProgressDialog(mainactivity);
+        progressDialog = new ProgressDialog(activity);
         progressDialog.setTitle("Please Wait!");
         progressDialog.setMessage("Processing...");
         progressDialog.setCancelable(false);
@@ -53,7 +52,7 @@ public class GetFieldFeed extends AsyncTask<Device,String,Device> {
     protected void onPostExecute(Device devi) {
         progressDialog.dismiss();
         super.onPostExecute(devi);
-        mainactivity.provideGraph(devi);
+        activity.provideGraph(devi);
 
     }
 

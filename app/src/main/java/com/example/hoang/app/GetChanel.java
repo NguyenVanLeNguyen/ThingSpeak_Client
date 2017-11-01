@@ -121,18 +121,18 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
             mainactivity.setList();
         }
 
-        TextView gateWay_name = (TextView) mainactivity.findViewById(R.id.tv_name_gateway);
-        TextView gateWay_status = (TextView) mainactivity.findViewById(R.id.tv_status_gateway);
-        TextView gateWay_update = (TextView) mainactivity.findViewById(R.id.tv_lastupdate_gateway);
+        TextView gateWay_name = (TextView) mainactivity.findViewById(R.id.txv_name_gateway);
+        TextView gateWay_status = (TextView) mainactivity.findViewById(R.id.txv_status_gateway);
+        TextView gateWay_update = (TextView) mainactivity.findViewById(R.id.txv_lastupdate_gateway);
 
         assert result != null;
         gateWay_name.setText(result.getAPIkey());
         if(result.getStatus() == Chanel.GATEWAY_ONLINE){
-            gateWay_status.setText("Online");
+            gateWay_status.setText(R.string.status_on);
             gateWay_status.setTextColor(Color.BLUE);
         }
         else{
-            gateWay_status.setText("Offline");
+            gateWay_status.setText(R.string.status_off);
             gateWay_status.setTextColor(Color.RED);
         }
         gateWay_update.setText("Update at: " + formatTimeJson.format(result.getLastUpdate().getTime()));
@@ -141,6 +141,15 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
                 .findFragmentById(R.id.mapid);
         mapFragment.getMapAsync(callbackMap);
 
+        String[] DeviceNames  = new String[result.getFields().size()];
+        int i = 0;
+        for(Device devi : result.getFields()){
+            DeviceNames[i] = devi.getName();
+            i++;
+        }
+        mainactivity.setDEVICES(DeviceNames);
+
+        //mainactivity.startJob();
         //mainactivity.searchViewCode();
 
 
