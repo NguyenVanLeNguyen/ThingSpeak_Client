@@ -1,4 +1,6 @@
-package com.example.hoang.app;
+package com.example.hoang.Component;
+
+import com.example.hoang.app.ProcessingTime;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

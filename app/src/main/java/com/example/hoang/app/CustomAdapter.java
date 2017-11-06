@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
+import com.example.hoang.Component.Device;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -20,7 +21,7 @@ import java.util.Date;
  * Created by hoang on 10/09/2017.
  */
 
-public class CustomAdapter extends ArrayAdapter<com.example.hoang.app.Device> {
+public class CustomAdapter extends ArrayAdapter<Device> {
     private int Resource;
     private ArrayList<Device> Objects;
     private ArrayList<Device> Backup;

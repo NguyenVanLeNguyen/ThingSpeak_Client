@@ -2,7 +2,7 @@ package com.example.hoang.app;
 
 import android.support.v7.app.AppCompatActivity;
 
-import java.util.List;
+import com.example.hoang.Component.Device;
 
 /**
  * Created by nguyenhoang on 01/11/2017.

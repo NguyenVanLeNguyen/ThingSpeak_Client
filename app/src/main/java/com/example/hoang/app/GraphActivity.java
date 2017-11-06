@@ -1,10 +1,13 @@
 package com.example.hoang.app;
 
 
+import android.annotation.SuppressLint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.widget.TextView;
+
+import com.example.hoang.Component.Device;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -74,6 +77,7 @@ public class GraphActivity extends AppCompatActivity {
 
     public void getSevenDay(){
 
+        @SuppressLint("SimpleDateFormat")
         DateFormat formatDayOfMonth = new SimpleDateFormat("dd/MM");
         processer = new ProcessingTime();
 

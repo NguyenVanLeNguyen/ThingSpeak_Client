@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.hoang.AboutNetWork.ConnectionReceiver;
+import com.example.hoang.Component.Device;
 
 import java.util.ArrayList;
 import static com.example.hoang.app.R.layout.item;

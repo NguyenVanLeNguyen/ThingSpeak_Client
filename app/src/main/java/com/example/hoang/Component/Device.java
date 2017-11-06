@@ -1,4 +1,4 @@
-package com.example.hoang.app;
+package com.example.hoang.Component;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -154,7 +154,7 @@ public class Device implements Parcelable,Cloneable {
     }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
 

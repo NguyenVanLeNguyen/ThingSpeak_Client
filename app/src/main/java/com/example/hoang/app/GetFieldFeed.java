@@ -1,9 +1,12 @@
 package com.example.hoang.app;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.util.Pair;
+
+import com.example.hoang.Component.Device;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +31,7 @@ import java.util.GregorianCalendar;
 
 public class GetFieldFeed extends AsyncTask<Device,String,Device> {
     private ProgressDialog progressDialog;
+    @SuppressLint("StaticFieldLeak")
     private ShowListDevice activity;
     private ProcessingTime convertTime;
     private DateFormat formatTimeJson = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");

@@ -1,9 +1,8 @@
 package com.example.hoang.app;
 
 import android.annotation.SuppressLint;
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,7 +22,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -42,25 +40,25 @@ import android.widget.Toast;
 
 
 import com.example.hoang.AboutNetWork.ConnectionReceiver;
-import com.example.hoang.Notification.CheckNote;
+import com.example.hoang.Component.Device;
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static com.example.hoang.app.R.layout.item;
 
 public class MainActivity extends ShowListDevice implements NavigationView.OnNavigationItemSelectedListener,SearchView.OnSuggestionListener,SearchView.OnQueryTextListener{
     public final static  String SHARED_PREFERENCES_NAME = "CURRENT_CHANEL";
     public static final String RESULTSEARCH = "ResultSearch";
+    public static  int firstload = 0;
     private ListView lvDevice ;
     private SharedPreferences sharedPreferences;
     private String chanelID;
     private ArrayList<Device> listDevice;
     private SearchView searchView;
-    private JobScheduler jobScheduler;
-    private JobInfo jobInfo;
-
-
+    private AlarmManager alarm;
+    PendingIntent pendingIntent;
     private SimpleCursorAdapter mAdapter;
     private static  String[] DEVICES ;
     @Override
@@ -82,9 +80,16 @@ public class MainActivity extends ShowListDevice implements NavigationView.OnNav
         toggle.syncState();
 
         hint_sugges();
-        sharedPreferences  = this.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 
+        sharedPreferences  = this.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
         chanelID = sharedPreferences.getString("CHANEL_ID","");
+
+        UpdateService.mainActivity = this;
+        Intent intent = new Intent(MainActivity.this, UpdateService.class);
+        intent.putExtra("abc",chanelID);
+        pendingIntent =
+                PendingIntent.getService(MainActivity.this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
 
         if(ConnectionReceiver.isConnected()){
             if (chanelID.equals("") || chanelID.isEmpty()){
@@ -92,10 +97,9 @@ public class MainActivity extends ShowListDevice implements NavigationView.OnNav
 
             }
             else{
-
                 listDevice = new ArrayList<>();
-                GetChanel getch = new GetChanel(MainActivity.this);
-                getch.execute(chanelID);
+                //cal = Calendar.getInstance();
+                 alarm.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), 10*1000, pendingIntent);
             }
 
         }
@@ -115,19 +119,50 @@ public class MainActivity extends ShowListDevice implements NavigationView.OnNav
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener( this);
-        //final ArrayList<Device> finalListDevice1 = listDevice;
+
 
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        Log.d("status activity","onPause");
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("CHANEL_ID",chanelID);
         editor.apply();
+        alarm.cancel(pendingIntent);
+
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("status activity","onStop");
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        alarm.cancel(pendingIntent);
+    }
+
+    /**
+     * Dispatch onResume() to fragments.  Note that for better inter-operation
+     * with older versions of the platform, at the point of this call the
+     * fragments attached to the activity are <em>not</em> resumed.  This means
+     * that in some cases the previous state may still be saved, not allowing
+     * fragment transactions that modify the state.  To correctly interact
+     * with fragments in their proper state, you should instead override
+     * {@link #onResumeFragments()}.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("status activity","onResume");
+        Calendar cal = Calendar.getInstance();
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 10*1000, pendingIntent);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -199,7 +234,7 @@ public class MainActivity extends ShowListDevice implements NavigationView.OnNav
             public void onClick(DialogInterface dialog, int id) {
                 chanelID = enterChanelID.getText().toString();
                 listDevice = new ArrayList<>();
-                GetChanel getch = new GetChanel(MainActivity.this);
+                GetChanel getch = new GetChanel(MainActivity.this,1);
                 getch.execute(chanelID);
 
             }
@@ -261,20 +296,8 @@ public class MainActivity extends ShowListDevice implements NavigationView.OnNav
 
             }
             else{
-                ComponentName serviceComponent = new ComponentName(this, CheckNote.class);
-                JobInfo.Builder builder = new JobInfo.Builder(1, serviceComponent);
-                builder.setPeriodic( 20000 );
-                builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED );
-                builder.setRequiresCharging(false);
-                builder.setRequiresDeviceIdle(false);
-                PersistableBundle bundle = new PersistableBundle();
-                bundle.putString("abc",chanelID);
-                builder.setExtras(bundle);
-                jobInfo = builder.build();
-                jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-               // startJob();
                 listDevice = new ArrayList<>();
-                GetChanel getch = new GetChanel(MainActivity.this);
+                GetChanel getch = new GetChanel(MainActivity.this,1);
                 getch.execute(chanelID);
                 Toast.makeText(MainActivity.this,"update",Toast.LENGTH_SHORT).show();
             }
@@ -294,29 +317,6 @@ public class MainActivity extends ShowListDevice implements NavigationView.OnNav
             alertDialog.show();
         }
     }
-
-    public void startJob() {
-        ComponentName serviceComponent = new ComponentName(this, CheckNote.class);
-        JobInfo.Builder builder = new JobInfo.Builder(1, serviceComponent);
-        builder.setPeriodic( 20000 );
-        builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED );
-        builder.setRequiresCharging(false);
-        builder.setRequiresDeviceIdle(false);
-        PersistableBundle bundle = new PersistableBundle();
-        bundle.putString("abc",chanelID);
-        builder.setExtras(bundle);
-        jobInfo = builder.build();
-        jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-        jobScheduler.schedule(jobInfo);
-        Log.d("status","start button");
-    }
-
-    public void cancelJob() {
-        jobScheduler.cancelAll();
-        Log.d("status","stop button");
-
-    }
-
 
     @Override
     public boolean onQueryTextSubmit(String query) {

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.hoang.app.Chanel;
+import com.example.hoang.Component.Chanel;
 
 import java.util.ArrayList;
 

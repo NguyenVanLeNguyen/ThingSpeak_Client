@@ -7,6 +7,8 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hoang.Component.Chanel;
+import com.example.hoang.Component.Device;
 import com.google.android.gms.maps.SupportMapFragment;
 
 import org.json.JSONArray;
@@ -31,12 +33,16 @@ import java.util.GregorianCalendar;
 
 public class GetChanel extends AsyncTask<String,String,Chanel>
 {
+
+
     private ProgressDialog progressDialog;
     private MainActivity mainactivity;
+    private int type;
     private ProcessingTime convertTime;
     private DateFormat formatTimeJson = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-    public GetChanel(MainActivity m){
+    public GetChanel(MainActivity m,int type){
         mainactivity = m;
+        this.type = type;
     }
 
     @Override
@@ -45,10 +51,15 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
         convertTime = new ProcessingTime();
         convertTime.setFormat(formatTimeJson);
         progressDialog = new ProgressDialog(mainactivity);
-        progressDialog.setTitle("Please Wait!");
-        progressDialog.setMessage("Processing...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+
+        if(type == 1 && mainactivity.firstload == 0){
+            progressDialog.setTitle("Please Wait!");
+            progressDialog.setMessage("Processing...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+            mainactivity.firstload++;
+        }
+
     }
 
     @Override
@@ -110,13 +121,17 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
     @Override
     protected void onPostExecute(Chanel result)
     {
-         progressDialog.dismiss();
+        if(progressDialog.isShowing() ){
+            progressDialog.dismiss();
+        }
+
         if(result == null) {
             Toast.makeText(mainactivity,"ID is unvailable",Toast.LENGTH_LONG).show();
 
             mainactivity.displayDialogChanelID();
         }
         else {
+            mainactivity.getListDevice().clear();
             mainactivity.getListDevice().addAll(result.getFields());
             mainactivity.setList();
         }
@@ -148,11 +163,6 @@ public class GetChanel extends AsyncTask<String,String,Chanel>
             i++;
         }
         mainactivity.setDEVICES(DeviceNames);
-
-        //mainactivity.startJob();
-        //mainactivity.searchViewCode();
-
-
     }
 
 

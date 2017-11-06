@@ -20,13 +20,13 @@ public class ProcessingTime {
         this.formatDayOfMonth = dayofmonth;
     }
 
-    ProcessingTime(){}
+    public ProcessingTime(){}
 
     public DateFormat getFormat() {
         return format;
     }
 
-    void setFormat(DateFormat format) {
+    public void setFormat(DateFormat format) {
         this.format = format;
     }
 
@@ -38,7 +38,7 @@ public class ProcessingTime {
         this.formatDayOfMonth = format_dayofmonth;
     }
 
-    GregorianCalendar getTime(String strTime)
+    public GregorianCalendar getTime(String strTime)
     {
         GregorianCalendar time = null;
         try {
@@ -67,7 +67,7 @@ public class ProcessingTime {
         return  result;
     }
 
-    ArrayList<GregorianCalendar> getSevenDay(GregorianCalendar toDay){
+    public ArrayList<GregorianCalendar> getSevenDay(GregorianCalendar toDay){
         ArrayList<GregorianCalendar> thisWeek = new ArrayList<>();
         long millis = 86400000;
         for(int i = 6; i >= 0; i--) {
