@@ -58,9 +58,11 @@ public class MainActivity extends ShowListDevice implements NavigationView.OnNav
     private ArrayList<Device> listDevice;
     private SearchView searchView;
     private AlarmManager alarm;
-    PendingIntent pendingIntent;
+    private PendingIntent pendingIntent;
+
     private SimpleCursorAdapter mAdapter;
     private static  String[] DEVICES ;
+    private long timeDelay;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,11 +87,9 @@ public class MainActivity extends ShowListDevice implements NavigationView.OnNav
         chanelID = sharedPreferences.getString("CHANEL_ID","");
 
         UpdateService.mainActivity = this;
-        Intent intent = new Intent(MainActivity.this, UpdateService.class);
-        intent.putExtra("abc",chanelID);
-        pendingIntent =
-                PendingIntent.getService(MainActivity.this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        timeDelay = 15000;
 
         if(ConnectionReceiver.isConnected()){
             if (chanelID.equals("") || chanelID.isEmpty()){
@@ -99,7 +99,13 @@ public class MainActivity extends ShowListDevice implements NavigationView.OnNav
             else{
                 listDevice = new ArrayList<>();
                 //cal = Calendar.getInstance();
-                 alarm.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), 10*1000, pendingIntent);
+                Log.d("start service","2 OnCreate");
+                Intent intent = new Intent(MainActivity.this, UpdateService.class);
+                intent.putExtra("abc",chanelID);
+                pendingIntent =
+                        PendingIntent.getService(MainActivity.this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                 alarm.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), timeDelay, pendingIntent);
             }
 
         }
@@ -160,8 +166,17 @@ public class MainActivity extends ShowListDevice implements NavigationView.OnNav
         super.onResume();
         Log.d("status activity","onResume");
         Calendar cal = Calendar.getInstance();
-        alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 10*1000, pendingIntent);
+        if (!(chanelID.equals("") || chanelID.isEmpty())) {
+            listDevice = new ArrayList<>();
+            //cal = Calendar.getInstance();
+            Log.d("start service", "1 OnResume");
+            Intent intent = new Intent(MainActivity.this, UpdateService.class);
+            intent.putExtra("abc",chanelID);
+            pendingIntent =
+                    PendingIntent.getService(MainActivity.this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+            alarm.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), timeDelay, pendingIntent);
+        }
     }
 
     @Override
@@ -174,7 +189,6 @@ public class MainActivity extends ShowListDevice implements NavigationView.OnNav
         searchView.setOnQueryTextListener(this);
         searchView.setOnSuggestionListener(this);
         searchView.setSuggestionsAdapter(mAdapter);
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -234,8 +248,14 @@ public class MainActivity extends ShowListDevice implements NavigationView.OnNav
             public void onClick(DialogInterface dialog, int id) {
                 chanelID = enterChanelID.getText().toString();
                 listDevice = new ArrayList<>();
-                GetChanel getch = new GetChanel(MainActivity.this,1);
-                getch.execute(chanelID);
+                firstload = 0;
+                Log.d("start service","1 displayDialogChanelID "+ chanelID + " end");
+                Intent intent = new Intent(MainActivity.this, UpdateService.class);
+                intent.putExtra("abc",chanelID);
+                pendingIntent =
+                        PendingIntent.getService(MainActivity.this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                alarm.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), timeDelay, pendingIntent);
 
             }
         })
@@ -297,9 +317,16 @@ public class MainActivity extends ShowListDevice implements NavigationView.OnNav
             }
             else{
                 listDevice = new ArrayList<>();
-                GetChanel getch = new GetChanel(MainActivity.this,1);
-                getch.execute(chanelID);
-                Toast.makeText(MainActivity.this,"update",Toast.LENGTH_SHORT).show();
+                alarm.cancel(pendingIntent);
+                Log.d("start service","4 updateData "+ chanelID + " end");
+                Intent intent = new Intent(MainActivity.this, UpdateService.class);
+                intent.putExtra("abc",chanelID);
+                pendingIntent =
+                        PendingIntent.getService(MainActivity.this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                alarm.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), timeDelay, pendingIntent);
+
+
             }
 
         }
@@ -361,7 +388,7 @@ public class MainActivity extends ShowListDevice implements NavigationView.OnNav
     }
 
     private void hint_sugges(){
-        final String[] from = new String[]{"cityName"};
+        final String[] from = new String[]{"fieldName"};
         final int[] to = new int[]{android.R.id.text1};
         mAdapter = new SimpleCursorAdapter(getApplicationContext(),
                 R.layout.hint_row,
@@ -383,7 +410,7 @@ public class MainActivity extends ShowListDevice implements NavigationView.OnNav
         return true;
     }
 
-    public static void setDEVICES(String[] DEVICES) {
+    public  void setDEVICES(String[] DEVICES) {
         MainActivity.DEVICES = DEVICES;
     }
 }
